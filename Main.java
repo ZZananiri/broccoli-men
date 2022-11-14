@@ -3,7 +3,7 @@ import javafx.stage.Stage;
 import models.CompanyModel;
 import views.MainView;
 
-public class CompanyManagerApp extends Application {
+public class Main extends Application {
     CompanyModel companyModel;
     MainView view;
 
