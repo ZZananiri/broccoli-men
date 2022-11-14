@@ -1,0 +1,35 @@
+package views;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import models.CompanyModel;
+
+import java.io.IOException;
+
+public class MainView {
+    private CompanyModel model;
+    private Stage stage;
+
+    public MainView(CompanyModel model, Stage stage) {
+        this.model = model;
+        this.stage = stage;
+        initializeView();
+    }
+
+    private void initializeView() {
+        Parent root;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/MainView.fxml"));
+            loader.setController(this);
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException("fxml file not found.");
+        }
+        stage.setTitle("Company Management System");
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+}
