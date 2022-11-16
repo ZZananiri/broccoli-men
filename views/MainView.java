@@ -26,13 +26,18 @@ public class MainView {
         Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/MainView.fxml"));
-            loader.setController(this);
+            loader.setController(controller);
             root = loader.load();
         } catch (IOException e) {
             throw new RuntimeException("fxml file not found.");
         }
         stage.setTitle("Company Management System");
+        stage.setResizable(false);
         stage.setScene(new Scene(root));
         stage.show();
+    }
+
+    public Stage getStage() {
+        return this.stage;
     }
 }
