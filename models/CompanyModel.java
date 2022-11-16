@@ -12,8 +12,14 @@ public class CompanyModel {
     public CompanyModel() {
         this.name = "Default Company";
         this.description = "This is a default company; modify me to your liking!";
+        this.departments = new ArrayList<Department>();
+        this.teams = new ArrayList<Team>();
+        this.employees = new ArrayList<Employee>();
     }
 
+    public void addDepartment(Department department){
+        this.departments.add(department);
+    }
     public ArrayList<Department> getDepartments(){
         return this.departments;
     }
