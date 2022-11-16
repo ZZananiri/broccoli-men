@@ -12,22 +12,21 @@
          <children>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="520.0" style="-fx-background-color: #e9e9e9;">
                <children>
-                  <Text layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Default Company" wrappingWidth="175.0">
+                  <Text fx:id="companyNameTxt" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Default Company" wrappingWidth="175.0">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Text>
-                  <Text fill="#4b4b4b" layoutX="20.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Click the &quot;Edit Details&quot; button to edit the details of your company!" wrappingWidth="250.0" />
-                  <Text layoutX="14.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Departments: 0" />
-                  <Text layoutX="14.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Teams: 0" />
-                  <Text layoutX="14.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Employees: 0" />
-                  <Button layoutX="194.0" layoutY="11.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Edit Details" />
-                  <Text layoutX="194.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Salary Budget: $XXXXXXX" />
-                  <Text layoutX="194.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Salary Expense: $XXXXXXX" />
-                  <Button layoutX="391.0" layoutY="143.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0" text="Set Salary Budget" />
-                  <TextField layoutX="391.0" layoutY="113.0" prefHeight="26.0" prefWidth="116.0" promptText="New Salary Budget" />
-                  <Button layoutX="375.0" layoutY="40.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="130.0" text="Create Department" />
-                  <TextField layoutX="336.0" layoutY="10.0" prefHeight="26.0" prefWidth="169.0" promptText="Department Name" />
+                  <Text fx:id="companyDescriptionTxt" fill="#4b4b4b" layoutX="20.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Click the &quot;Edit Details&quot; button to edit the details of your company!" wrappingWidth="475.0" />
+                  <Text fx:id="departmentCountTxt" layoutX="14.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Departments: 0" />
+                  <Text fx:id="teamCountTxt" layoutX="14.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Teams: 0" />
+                  <Text fx:id="employeeCountTxt" layoutX="14.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Employees: 0" />
+                  <Button layoutX="194.0" layoutY="13.0" mnemonicParsing="false" onAction="#editCompanyDetails" prefHeight="26.0" prefWidth="142.0" text="Edit Company Details" />
+                  <Text fx:id="companySalaryBudgetTxt" layoutX="194.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Salary Budget: $XXXXXXX" />
+                  <Text fx:id="companySalaryExpenseTxt" layoutX="194.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Salary Expense: $XXXXXXX" />
+                  <Button layoutX="391.0" layoutY="143.0" mnemonicParsing="false" onAction="#setCompanySalaryBudget" prefHeight="26.0" prefWidth="116.0" text="Set Salary Budget" />
+                  <TextField fx:id="salaryBudgetField" layoutX="391.0" layoutY="113.0" prefHeight="26.0" prefWidth="116.0" promptText="New Salary Budget" />
+                  <Button layoutX="349.0" layoutY="13.0" mnemonicParsing="false" onAction="#createNewDepartment" prefHeight="26.0" prefWidth="157.0" text="Create New Department" />
                </children>
             </AnchorPane>
             <AnchorPane layoutY="180.0" prefHeight="315.0" prefWidth="520.0" />
