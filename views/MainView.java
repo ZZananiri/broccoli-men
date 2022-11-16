@@ -1,5 +1,6 @@
 package views;
 
+import controller.MainController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,11 +12,13 @@ import java.io.IOException;
 
 public class MainView {
     private CompanyModel model;
+    private MainController controller;
     private Stage stage;
 
     public MainView(CompanyModel model, Stage stage) {
         this.model = model;
         this.stage = stage;
+        this.controller = new MainController(model, this);  // Creating a controller
         initializeView();
     }
 
