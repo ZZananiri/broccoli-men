@@ -45,7 +45,7 @@
             <Text fx:id="selectedDepartmentExpenses" layoutX="14.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Department Salary Expense: " />
             <Text fx:id="selectedDepartmentTeamCount" layoutX="14.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Teams:" />
             <Text fx:id="selectedDepartmentEmployeeCount" layoutX="14.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Employees:" />
-<!--            <Button layoutX="237.0" layoutY="190.0" mnemonicParsing="false" onAction="#deleteDepartment" prefHeight="26.0" prefWidth="120.0" text="Delete Department" />-->
+            <Button layoutX="237.0" layoutY="190.0" mnemonicParsing="false" onAction="#deleteDepartment" prefHeight="26.0" prefWidth="120.0" text="Delete Department" />
 <!--            <Button layoutX="4.0" layoutY="190.0" mnemonicParsing="false" onAction="#createNewTeam" prefHeight="26.0" prefWidth="116.0" text="Create New Team" />-->
 <!--            <Button layoutX="125.0" layoutY="190.0" mnemonicParsing="false" onAction="#editDepartmentDetails" prefHeight="26.0" prefWidth="107.0" text="Edit Department" />-->
             <ChoiceBox fx:id="departmentsChoiceBox" layoutX="114.0" layoutY="13.0" prefWidth="150.0" />
