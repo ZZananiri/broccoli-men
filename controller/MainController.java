@@ -82,13 +82,16 @@ public class MainController {
             Button setDepartmentDescriptionBtn = new Button();
             setDepartmentDescriptionBtn.textProperty().set("Delete Department");
             setDepartmentDescriptionBtn.setOnAction(e -> {
-                departmentsChoiceBox.getItems().remove(departmentsChoiceBox.getSelectionModel().getSelectedItem());
+                Department department = departmentsChoiceBox.getSelectionModel().getSelectedItem();
+                departmentsChoiceBox.getItems().remove(department);
+                this.model.removeDepartment(department);
                 selectedDepartmentName.setText("Selected Department: ");
                 departmentDescriptionTxt.setText("");
                 selectedDepartmentTeamCount.setText("Number of Teams: ");
                 selectedDepartmentEmployeeCount.setText("Number of Employees: ");
                 selectedDepartmentBudget.setText("Department Salary Budget: ");
                 selectedDepartmentExpenses.setText("Department Salary Expense: ");
+                this.departmentCountTxt.setText("Number of Departments: " + this.model.getDepartments().size());
                 departmentsChoiceBox.getSelectionModel().select(null);
                 dialog.close();
             });
@@ -214,12 +217,12 @@ public class MainController {
                 String name = departmentNameField.getText().substring(0, Math.min(max_name_length, departmentNameField.getLength()));
                 String description = departmentDescriptionField.getText().substring(0, Math.min(max_description_length, departmentDescriptionField.getLength()));
                 Department department = new Department(name, description);
-                this.model.addDepartment(department);
                 ObservableList<Department> departmentNames = departmentsChoiceBox.getItems();
                 boolean containsSearchStr = departmentNames.stream().anyMatch(dep -> name.equalsIgnoreCase(dep.getName()));
                 if (containsSearchStr) {
                     WarningPopup.createWarningPopup("Department Already Exists", "A department with this name already exists in this company!", dialog);
                 } else {
+                    this.model.addDepartment(department);
                     departmentNames.add(department);
                     this.departmentCountTxt.setText("Number of Departments: " + this.model.getDepartments().size());
                     dialog.close();
