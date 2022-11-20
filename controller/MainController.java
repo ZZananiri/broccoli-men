@@ -1,10 +1,12 @@
 package controller;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -45,6 +47,35 @@ public class MainController {
     private Text companySalaryExpenseTxt;
     @FXML
     private TextField salaryBudgetField;
+    @FXML
+    private ChoiceBox<Department> departmentsChoiceBox;
+    @FXML
+    private Text selectedDepartmentName;
+    @FXML
+    private Text departmentDescriptionTxt;
+    @FXML
+    private Text selectedDepartmentBudget;
+    @FXML
+    private Text selectedDepartmentExpenses;
+    @FXML
+    private Text selectedDepartmentTeamCount;
+    @FXML
+    private Text selectedDepartmentEmployeeCount;
+
+    @FXML
+    private void displaySelectedDepartment(ActionEvent event) {
+        if (!(departmentsChoiceBox.getSelectionModel().getSelectedItem() == null)) {
+            Department choice = departmentsChoiceBox.getSelectionModel().getSelectedItem();
+            selectedDepartmentName.setText("Selected Department: " + choice.getName());
+            departmentDescriptionTxt.setText(choice.getDescription());
+            selectedDepartmentTeamCount.setText("Number of Teams: " + choice.getTeams().size());
+            selectedDepartmentEmployeeCount.setText("Number of Employees: " + choice.getEmployees().size());
+            selectedDepartmentBudget.setText("Department Salary Budget: " + choice.getBudget());
+            selectedDepartmentExpenses.setText("Department Salary Expense: " + choice.getExpense());
+        } else {
+            WarningPopup.createWarningPopup("No Department Selected", "Select a department from the dropdown first to view.", this.view.getStage());
+        }
+    }
 
     @FXML
     private void editCompanyDetails(ActionEvent event) {
@@ -134,14 +165,19 @@ public class MainController {
             if (departmentNameField.getLength() == 0) {
                 WarningPopup.createWarningPopup("No Name Provided", "Department name can not be empty!", dialog);
             } else {
-                String name = departmentNameField.getText().substring(0, Math.min(max_description_length, departmentNameField.getLength()));
+                String name = departmentNameField.getText().substring(0, Math.min(max_name_length, departmentNameField.getLength()));
                 String description = departmentDescriptionField.getText().substring(0, Math.min(max_description_length, departmentDescriptionField.getLength()));
-//            model.setDescription(description);
-//            companyDescriptionTxt.setText(description);
                 Department department = new Department(name, description);
                 this.model.addDepartment(department);
-                System.out.println(this.model.getDepartments());
-                dialog.close();
+                ObservableList<Department> departmentNames = departmentsChoiceBox.getItems();
+                boolean containsSearchStr = departmentNames.stream().anyMatch(dep -> name.equalsIgnoreCase(dep.getName()));
+                if (containsSearchStr) {
+                    WarningPopup.createWarningPopup("Department Already Exists", "A department with this name already exists in this company!", dialog);
+                } else {
+                    departmentNames.add(department);
+                    this.departmentCountTxt.setText("Number of Departments: " + this.model.getDepartments().size());
+                    dialog.close();
+                }
             }
         });
         HBox topHbox = new HBox(departmentNameField, topNote);
