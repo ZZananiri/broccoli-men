@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.CompanyModel;
@@ -61,6 +62,54 @@ public class MainController {
     private Text selectedDepartmentTeamCount;
     @FXML
     private Text selectedDepartmentEmployeeCount;
+
+    @FXML
+    private void deleteDepartment(ActionEvent event) {
+        if (!(departmentsChoiceBox.getSelectionModel().getSelectedItem() == null)) {
+            final Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(view.getStage());
+            dialog.setTitle("Deletion Confirmation");
+            dialog.setResizable(false);
+            TextFlow confirmationText = new TextFlow();
+            Text text1 = new Text("Are you sure you would like to delete the " );
+            Text departmentName = new Text(departmentsChoiceBox.getSelectionModel().getSelectedItem().toString());
+            Text text2 = new Text(" department? This is irreversible.");
+            departmentName.setStyle("-fx-font-weight: bold");
+            confirmationText.getChildren().add(text1);
+            confirmationText.getChildren().add(departmentName);
+            confirmationText.getChildren().add(text2);
+            Button setDepartmentDescriptionBtn = new Button();
+            setDepartmentDescriptionBtn.textProperty().set("Delete Department");
+            setDepartmentDescriptionBtn.setOnAction(e -> {
+                Department department = departmentsChoiceBox.getSelectionModel().getSelectedItem();
+                departmentsChoiceBox.getItems().remove(department);
+                this.model.removeDepartment(department);
+                selectedDepartmentName.setText("Selected Department: ");
+                departmentDescriptionTxt.setText("");
+                selectedDepartmentTeamCount.setText("Number of Teams: ");
+                selectedDepartmentEmployeeCount.setText("Number of Employees: ");
+                selectedDepartmentBudget.setText("Department Salary Budget: ");
+                selectedDepartmentExpenses.setText("Department Salary Expense: ");
+                this.departmentCountTxt.setText("Number of Departments: " + this.model.getDepartments().size());
+                departmentsChoiceBox.getSelectionModel().select(null);
+                dialog.close();
+            });
+            HBox topHbox = new HBox(confirmationText);
+            topHbox.setSpacing(10);
+            HBox bottomHbox = new HBox(setDepartmentDescriptionBtn);
+            bottomHbox.setSpacing(10);
+            VBox dialogVbox = new VBox(topHbox,
+                    confirmationText, bottomHbox);
+            dialogVbox.setPadding(new Insets(20, 20, 20, 20));
+            dialogVbox.setSpacing(10);
+            Scene dialogScene = new Scene(dialogVbox);
+            dialog.setScene(dialogScene);
+            dialog.show();
+        } else {
+            WarningPopup.createWarningPopup("No Department Selected", "Select a department from the dropdown first to delete.", this.view.getStage());
+        }
+    }
 
     @FXML
     private void displaySelectedDepartment(ActionEvent event) {
@@ -168,12 +217,12 @@ public class MainController {
                 String name = departmentNameField.getText().substring(0, Math.min(max_name_length, departmentNameField.getLength()));
                 String description = departmentDescriptionField.getText().substring(0, Math.min(max_description_length, departmentDescriptionField.getLength()));
                 Department department = new Department(name, description);
-                this.model.addDepartment(department);
                 ObservableList<Department> departmentNames = departmentsChoiceBox.getItems();
                 boolean containsSearchStr = departmentNames.stream().anyMatch(dep -> name.equalsIgnoreCase(dep.getName()));
                 if (containsSearchStr) {
                     WarningPopup.createWarningPopup("Department Already Exists", "A department with this name already exists in this company!", dialog);
                 } else {
+                    this.model.addDepartment(department);
                     departmentNames.add(department);
                     this.departmentCountTxt.setText("Number of Departments: " + this.model.getDepartments().size());
                     dialog.close();
