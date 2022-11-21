@@ -289,7 +289,6 @@ public class MainController {
             departmentDescriptionTxt.setText(description);
             choice.setDescription(description);
             departmentsChoiceBox.getItems().add(choice);
-            System.out.println(this.model.getDepartments());
         });
         HBox topHbox = new HBox(departmentNameField, topNote, setDepartmentNameBtn);
         topHbox.setSpacing(10);
