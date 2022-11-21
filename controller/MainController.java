@@ -63,7 +63,7 @@ public class MainController {
 
     @FXML
     private void deleteDepartment(ActionEvent event) {
-        if (!(departmentsChoiceBox.getSelectionModel().getSelectedItem() == null)) {
+        if (!(departmentsComboBox.getSelectionModel().getSelectedItem() == null)) {
             final Stage dialog = new Stage();
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initOwner(view.getStage());
@@ -71,7 +71,7 @@ public class MainController {
             dialog.setResizable(false);
             TextFlow confirmationText = new TextFlow();
             Text text1 = new Text("Are you sure you would like to delete the " );
-            Text departmentName = new Text(departmentsChoiceBox.getSelectionModel().getSelectedItem().toString());
+            Text departmentName = new Text(departmentsComboBox.getSelectionModel().getSelectedItem().toString());
             Text text2 = new Text(" department? This is irreversible.");
             departmentName.setStyle("-fx-font-weight: bold");
             confirmationText.getChildren().add(text1);
@@ -80,8 +80,8 @@ public class MainController {
             Button setDepartmentDescriptionBtn = new Button();
             setDepartmentDescriptionBtn.textProperty().set("Delete Department");
             setDepartmentDescriptionBtn.setOnAction(e -> {
-                Department department = departmentsChoiceBox.getSelectionModel().getSelectedItem();
-                departmentsChoiceBox.getItems().remove(department);
+                Department department = departmentsComboBox.getSelectionModel().getSelectedItem();
+                departmentsComboBox.getItems().remove(department);
                 this.model.removeDepartment(department);
                 selectedDepartmentName.setText("Selected Department: ");
                 departmentDescriptionTxt.setText("");
@@ -90,7 +90,7 @@ public class MainController {
                 selectedDepartmentBudget.setText("Department Salary Budget: ");
                 selectedDepartmentExpenses.setText("Department Salary Expense: ");
                 this.departmentCountTxt.setText("Number of Departments: " + this.model.getDepartments().size());
-                departmentsChoiceBox.getSelectionModel().select(null);
+                departmentsComboBox.getSelectionModel().select(null);
                 dialog.close();
             });
             HBox topHbox = new HBox(confirmationText);
