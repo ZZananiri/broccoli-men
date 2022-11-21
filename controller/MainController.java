@@ -195,6 +195,7 @@ public class MainController {
     private void editDepartmentDetails(ActionEvent event) {
         Department choice = departmentsComboBox.getSelectionModel().getSelectedItem();
         if (!(choice == null)) {
+            displaySelectedDepartment(new ActionEvent());
             int choiceIndex = this.model.getDepartments().indexOf(choice);
             int max_name_length = 16;
             int max_description_length = 270;
