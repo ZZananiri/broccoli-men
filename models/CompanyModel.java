@@ -20,6 +20,9 @@ public class CompanyModel {
     public void addDepartment(Department department){
         this.departments.add(department);
     }
+    public void removeDepartment(Department department) {
+        this.departments.remove(department);
+    }
     public ArrayList<Department> getDepartments(){
         return this.departments;
     }
