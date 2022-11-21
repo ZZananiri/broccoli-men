@@ -20,8 +20,6 @@ import models.Department;
 import views.MainView;
 import views.WarningPopup;
 
-import javax.swing.*;
-
 public class MainController {
     CompanyModel model;
     MainView view;
@@ -230,6 +228,70 @@ public class MainController {
             }
         });
         HBox topHbox = new HBox(departmentNameField, topNote);
+        topHbox.setSpacing(10);
+        HBox bottomHbox = new HBox(setDepartmentDescriptionBtn, bottomNote);
+        bottomHbox.setSpacing(10);
+        VBox dialogVbox = new VBox(topHbox,
+                departmentDescriptionField, bottomHbox);
+        dialogVbox.setPadding(new Insets(20, 20, 20, 20));
+        dialogVbox.setSpacing(10);
+        Scene dialogScene = new Scene(dialogVbox);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
+
+    @FXML
+    private void editDepartmentDetails(ActionEvent event) {
+        int max_name_length = 16;
+        int max_description_length = 270;
+        final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(view.getStage());
+        Department choice = departmentsChoiceBox.getSelectionModel().getSelectedItem();
+        int choiceIndex = this.model.getDepartments().indexOf(choice);
+        dialog.setTitle("Edit Department Details");
+        dialog.setResizable(false);
+        TextField departmentNameField = new TextField();
+        TextArea departmentDescriptionField = new TextArea();
+        Button setDepartmentNameBtn = new Button();
+        Button setDepartmentDescriptionBtn = new Button();
+        Text topNote = new Text(max_name_length + " characters remaining.");
+        Text bottomNote = new Text(max_description_length + " characters remaining.");
+        departmentNameField.setPromptText("New department name");
+        departmentNameField.setOnKeyTyped(e -> {
+            int length = departmentNameField.getLength();
+            topNote.setText(length > max_name_length ?
+                    "Your input will be truncated" :
+                    max_name_length - length + " characters remaining.");
+        });
+        departmentDescriptionField.setPromptText("New department description");
+        departmentDescriptionField.setWrapText(true);
+        departmentDescriptionField.setOnKeyTyped(e -> {
+            int length = departmentDescriptionField.getLength();
+            bottomNote.setText(length > max_description_length ?
+                    "Your input will be truncated" :
+                    max_description_length - length + " characters remaining.");
+        });
+        setDepartmentNameBtn.textProperty().set("Set new name");
+        setDepartmentNameBtn.setOnAction(e -> {
+            String name = departmentNameField.getText().substring(0, Math.min(max_name_length, departmentNameField.getLength()));
+            departmentsChoiceBox.getItems().remove(choice);
+            this.model.getDepartments().get(choiceIndex).setName(name);
+            selectedDepartmentName.setText("Selected Department: " + name);
+            choice.setName(name);
+            departmentsChoiceBox.getItems().add(choice);
+        });
+        setDepartmentDescriptionBtn.textProperty().set("Set new description");
+        setDepartmentDescriptionBtn.setOnAction(e -> {
+            String description = departmentDescriptionField.getText().substring(0, Math.min(max_description_length, departmentDescriptionField.getLength()));
+            departmentsChoiceBox.getItems().remove(choice);
+            this.model.getDepartments().get(choiceIndex).setDescription(description);
+            departmentDescriptionTxt.setText(description);
+            choice.setDescription(description);
+            departmentsChoiceBox.getItems().add(choice);
+            System.out.println(this.model.getDepartments());
+        });
+        HBox topHbox = new HBox(departmentNameField, topNote, setDepartmentNameBtn);
         topHbox.setSpacing(10);
         HBox bottomHbox = new HBox(setDepartmentDescriptionBtn, bottomNote);
         bottomHbox.setSpacing(10);
