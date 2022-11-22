@@ -7,7 +7,6 @@ import java.util.ArrayList;
  */
 public class Department {
     private ArrayList<Team> teams;  // All the teams contained in the department
-    private ArrayList<Employee> employees;  // All the employees contained in the department.
     private String name;    // Name of the department
     private String description; // A description of the department
     private double salaryBudget;  // The salary budget of the department
@@ -22,7 +21,6 @@ public class Department {
         this.name = name;
         this.description = description;
         this.teams = new ArrayList<Team>();
-        this.employees = new ArrayList<Employee>();
         this.salaryBudget = 0.0;
         this.salaryExpense = 0.0;
     }
@@ -33,14 +31,6 @@ public class Department {
      */
     public ArrayList<Team> getTeams(){
         return this.teams;
-    }
-
-    /**
-     * Returns a list of the department's employees.
-     * @return an ArrayList containing the department's employees.
-     */
-    public ArrayList<Employee> getEmployees(){
-        return this.employees;
     }
 
     /**
