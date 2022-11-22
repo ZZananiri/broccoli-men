@@ -7,8 +7,6 @@ import java.util.*;
  */
 public class CompanyModel {
     private final ArrayList<Department> departments;  // All the departments in the company
-    private final ArrayList<Team> teams;  // All the teams in the company
-    private final ArrayList<Employee> employees;  // All the employees in the company
     private String name;    // Name of the company
     private String description; // A description of the company
 
@@ -19,8 +17,6 @@ public class CompanyModel {
         this.name = "Default Company";
         this.description = "This is a default company; modify me to your liking!";
         this.departments = new ArrayList<Department>();
-        this.teams = new ArrayList<Team>();
-        this.employees = new ArrayList<Employee>();
     }
 
     /**
@@ -46,22 +42,6 @@ public class CompanyModel {
      */
     public ArrayList<Department> getDepartments(){
         return this.departments;
-    }
-
-    /**
-     * Returns a list of the company's teams.
-     * @return an ArrayList containing the company's teams.
-     */
-    public ArrayList<Team> getTeams(){
-        return this.teams;
-    }
-
-    /**
-     * Returns a list of the company's employees.
-     * @return an ArrayList containing the company's employees.
-     */
-    public ArrayList<Employee> getEmployees(){
-        return this.employees;
     }
 
     /**
