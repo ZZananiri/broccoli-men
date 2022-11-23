@@ -3,6 +3,9 @@ import javafx.stage.Stage;
 import models.CompanyModel;
 import views.MainView;
 
+/**
+ * This is the Company Management System application.
+ */
 public class Main extends Application {
     CompanyModel companyModel;
     MainView view;
@@ -14,6 +17,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.companyModel = new CompanyModel(); // create a model
-        this.view = new MainView(companyModel, primaryStage); //tie the model to the view
+        this.view = new MainView(companyModel, primaryStage); // tie the model to the view
     }
 }
