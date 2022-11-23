@@ -9,6 +9,7 @@ public class Department {
     private ArrayList<Team> teams;  // All the teams contained in the department
     private String name;    // Name of the department
     private String description; // A description of the department
+    private int employeeCount;  // Count of the number of employees in the department
     private double salaryBudget;  // The salary budget of the department
     private double salaryExpense;   // The salary expense of the department
 
@@ -21,6 +22,7 @@ public class Department {
         this.name = name;
         this.description = description;
         this.teams = new ArrayList<Team>();
+        this.employeeCount = 0;
         this.salaryBudget = 0.0;
         this.salaryExpense = 0.0;
     }
@@ -60,6 +62,12 @@ public class Department {
      * @param description the new description of the department.
      */
     public void setDescription(String description) {this.description = description; }
+
+    /**
+     * Returns the count of employees in the department.
+     * @return the count of employees in the department.
+     */
+    public int getEmployeeCount() {return this.employeeCount;}
 
     /**
      * Returns the department's salary budget.

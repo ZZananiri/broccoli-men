@@ -20,16 +20,50 @@ import models.Department;
 import views.MainView;
 import views.WarningPopup;
 
+/**
+ * Controller class responsible for handling events invoked by view elements, and updating the model and the view
+ * accordingly.
+ */
 public class MainController {
-    CompanyModel model;
-    MainView view;
+    // Company names and descriptions are not to exceed these lengths
+    private final int MAX_COMPANY_NAME_LENGTH = 16;
+    private final int MAX_COMPANY_DESCRIPTION_LENGTH = 270;
 
+    // Department names and descriptions are not to exceed these lengths
+    private final int MAX_DEPARTMENT_NAME_LENGTH = 20;
+    private final int MAX_DEPARTMENT_DESCRIPTION_LENGTH = 95;
+
+    // Team names and descriptions are not to exceed these lengths
+    private final int MAX_TEAM_NAME_LENGTH = 20;
+    private final int MAX_TEAM_DESCRIPTION_LENGTH = 95;
+
+    private CompanyModel model; // The model of the company
+    private MainView view;  // The view in which this controller is responsible for
+
+    /**
+     * Constructs a MainController object with the specified view and company model.
+     * @param model The model of the company.
+     * @param view The view in which this controller is responsible for.
+     */
     public MainController(CompanyModel model, MainView view) {
         this.model = model;
         this.view = view;
     }
 
-    // COMPANY SECTION UI ELEMENTS
+    /**
+     * Updates all the UI elements displaying the details of the company.
+     */
+    private void updateCompanyDetailsUI() {
+        companyNameTxt.setText(model.getName());
+        companyDescriptionTxt.setText(model.getDescription());
+        departmentCountTxt.setText("Number of Departments: " + model.getDepartments().size());
+        teamCountTxt.setText("Number of Teams: " + model.getTeamCount());
+        employeeCountTxt.setText("Number of Employees: " + model.getEmployeeCount());
+        companySalaryBudgetTxt.setText("Salary Budget: " + model.getSalaryBudget());
+        companySalaryExpenseTxt.setText("Total Salary Expense: " + model.getSalaryExpense());
+    }
+
+    // === COMPANY SECTION UI ELEMENTS =======================================================
     @FXML
     private Text companyNameTxt;
     @FXML
@@ -46,6 +80,8 @@ public class MainController {
     private Text companySalaryExpenseTxt;
     @FXML
     private TextField salaryBudgetField;
+
+    // === DEPARTMENT SECTION UI ELEMENTS ============================================================
     @FXML
     private ComboBox<Department> departmentsComboBox;
     @FXML
@@ -61,256 +97,325 @@ public class MainController {
     @FXML
     private Text selectedDepartmentEmployeeCount;
 
-    @FXML
-    private void deleteDepartment(ActionEvent event) {
-        if (!(departmentsComboBox.getSelectionModel().getSelectedItem() == null)) {
-            final Stage dialog = new Stage();
-            dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.initOwner(view.getStage());
-            dialog.setTitle("Deletion Confirmation");
-            dialog.setResizable(false);
-            TextFlow confirmationText = new TextFlow();
-            Text text1 = new Text("Are you sure you would like to delete the " );
-            Text departmentName = new Text(departmentsComboBox.getSelectionModel().getSelectedItem().toString());
-            Text text2 = new Text(" department? This is irreversible.");
-            departmentName.setStyle("-fx-font-weight: bold");
-            confirmationText.getChildren().add(text1);
-            confirmationText.getChildren().add(departmentName);
-            confirmationText.getChildren().add(text2);
-            Button setDepartmentDescriptionBtn = new Button();
-            setDepartmentDescriptionBtn.textProperty().set("Delete Department");
-            setDepartmentDescriptionBtn.setOnAction(e -> {
-                Department department = departmentsComboBox.getSelectionModel().getSelectedItem();
-                departmentsComboBox.getItems().remove(department);
-                this.model.removeDepartment(department);
-                selectedDepartmentName.setText("Selected Department: ");
-                departmentDescriptionTxt.setText("");
-                selectedDepartmentTeamCount.setText("Number of Teams: ");
-                selectedDepartmentEmployeeCount.setText("Number of Employees: ");
-                selectedDepartmentBudget.setText("Department Salary Budget: ");
-                selectedDepartmentExpenses.setText("Department Salary Expense: ");
-                this.departmentCountTxt.setText("Number of Departments: " + this.model.getDepartments().size());
-                departmentsComboBox.getSelectionModel().select(null);
-                dialog.close();
-            });
-            HBox topHbox = new HBox(confirmationText);
-            topHbox.setSpacing(10);
-            HBox bottomHbox = new HBox(setDepartmentDescriptionBtn);
-            bottomHbox.setSpacing(10);
-            VBox dialogVbox = new VBox(topHbox,
-                    confirmationText, bottomHbox);
-            dialogVbox.setPadding(new Insets(20, 20, 20, 20));
-            dialogVbox.setSpacing(10);
-            Scene dialogScene = new Scene(dialogVbox);
-            dialog.setScene(dialogScene);
-            dialog.show();
-        } else {
-            WarningPopup.createWarningPopup("No Department Selected", "Select a department from the dropdown first to delete.", this.view.getStage());
-        }
-    }
+    // === TEAM SECTION UI ELEMENTS ======================================================================
 
-    @FXML
-    private void displaySelectedDepartment(ActionEvent event) {
-        if (!(departmentsComboBox.getSelectionModel().getSelectedItem() == null)) {
-            Department choice = departmentsComboBox.getSelectionModel().getSelectedItem();
-            selectedDepartmentName.setText("Selected Department: " + choice.getName());
-            departmentDescriptionTxt.setText(choice.getDescription());
-            selectedDepartmentTeamCount.setText("Number of Teams: " + choice.getTeams().size());
-            selectedDepartmentEmployeeCount.setText("Number of Employees: " + choice.getEmployees().size());
-            selectedDepartmentBudget.setText("Department Salary Budget: " + choice.getBudget());
-            selectedDepartmentExpenses.setText("Department Salary Expense: " + choice.getExpense());
-        } else {
-            WarningPopup.createWarningPopup("No Department Selected", "Select a department from the dropdown first to view.", this.view.getStage());
-        }
-    }
 
+    // === COMPANY SECTION EVENT HANDLERS ================================================================
+    
     @FXML
     private void editCompanyDetails(ActionEvent event) {
-        int max_name_length = 16;
-        int max_description_length = 270;
+        // Creating a stage on which the user will be able to edit company details
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(view.getStage());
         dialog.setTitle("Edit Company Details");
         dialog.setResizable(false);
+
+        // Defining the elements on the stage
         TextField companyNameField = new TextField();
         TextArea companyDescriptionField = new TextArea();
         Button setCompanyNameBtn = new Button();
         Button setCompanyDescriptionBtn = new Button();
-        Text topNote = new Text(max_name_length + " characters remaining.");
-        Text bottomNote = new Text(max_description_length + " characters remaining.");
+        Text topNote = new Text(MAX_COMPANY_NAME_LENGTH + " characters remaining.");
+        Text bottomNote = new Text(MAX_COMPANY_DESCRIPTION_LENGTH + " characters remaining.");
+
+        // Configuring elements
         companyNameField.setPromptText("New company name");
-        companyNameField.setOnKeyTyped(e -> {
-            int length = companyNameField.getLength();
-            topNote.setText(length > max_name_length ?
-                    "Your input will be truncated" :
-                    max_name_length - length + " characters remaining.");
-        });
         companyDescriptionField.setPromptText("New company description");
         companyDescriptionField.setWrapText(true);
+        setCompanyNameBtn.textProperty().set("Set new name");
+        setCompanyDescriptionBtn.textProperty().set("Set new description");
+
+        // Defining event handlers for interactions with elements
+
+        // Updating the name character limit note as the user types
+        companyNameField.setOnKeyTyped(e -> {
+            int length = companyNameField.getLength();
+            topNote.setText(length > MAX_COMPANY_NAME_LENGTH ?
+                    "Your input will be truncated" :
+                    MAX_COMPANY_NAME_LENGTH - length + " characters remaining.");
+        });
+
+        // Updating the description character limit note as the user types
         companyDescriptionField.setOnKeyTyped(e -> {
             int length = companyDescriptionField.getLength();
-            bottomNote.setText(length > max_description_length ?
+            bottomNote.setText(length > MAX_COMPANY_DESCRIPTION_LENGTH ?
                     "Your input will be truncated" :
-                    max_description_length - length + " characters remaining.");
+                    MAX_COMPANY_DESCRIPTION_LENGTH - length + " characters remaining.");
         });
-        setCompanyNameBtn.textProperty().set("Set new name");
+
+        // Updating the company's name on set name button click
         setCompanyNameBtn.setOnAction(e -> {
-            String name = companyNameField.getText().substring(0, Math.min(max_name_length, companyNameField.getLength()));
+            String name = companyNameField.getText().substring(0, Math.min(MAX_COMPANY_NAME_LENGTH, companyNameField.getLength()));
             model.setName(name);
             companyNameTxt.setText(name);
         });
-        setCompanyDescriptionBtn.textProperty().set("Set new description");
+
+        // Updating the company's description on set description button click
         setCompanyDescriptionBtn.setOnAction(e -> {
-            String description = companyDescriptionField.getText().substring(0, Math.min(max_description_length, companyDescriptionField.getLength()));
+            String description = companyDescriptionField.getText().substring(0, Math.min(MAX_COMPANY_DESCRIPTION_LENGTH, companyDescriptionField.getLength()));
             model.setDescription(description);
             companyDescriptionTxt.setText(description);
         });
+
+        // Creating layout for the scene
         HBox topHbox = new HBox(companyNameField, topNote, setCompanyNameBtn);
         topHbox.setSpacing(10);
         HBox bottomHbox = new HBox(setCompanyDescriptionBtn, bottomNote);
         bottomHbox.setSpacing(10);
-        VBox dialogVbox = new VBox(topHbox,
-                companyDescriptionField, bottomHbox);
+        VBox dialogVbox = new VBox(topHbox, companyDescriptionField, bottomHbox);
         dialogVbox.setPadding(new Insets(20, 20, 20, 20));
         dialogVbox.setSpacing(10);
+
+        // Setting a scene on the stage and showing the stage
         Scene dialogScene = new Scene(dialogVbox);
         dialog.setScene(dialogScene);
         dialog.show();
     }
     @FXML
     private void createNewDepartment(ActionEvent event) {
-        int max_name_length = 16;
-        int max_description_length = 270;
+        // Creating a stage on which the user will be able to create a new department
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(view.getStage());
         dialog.setTitle("Create New Department");
         dialog.setResizable(false);
+
+        // Defining the elements on the stage
         TextField departmentNameField = new TextField();
         TextArea departmentDescriptionField = new TextArea();
-        Button setDepartmentDescriptionBtn = new Button();
-        Text topNote = new Text(max_name_length + " characters remaining.");
-        Text bottomNote = new Text(max_description_length + " characters remaining.");
-        departmentNameField.setPromptText("Set department name");
-        departmentNameField.setOnKeyTyped(e -> {
-            int length = departmentNameField.getLength();
-            topNote.setText(length > max_name_length ?
-                    "Your input will be truncated" :
-                    max_name_length - length + " characters remaining.");
-        });
+        Button createNewDepartmentBtn = new Button();
+        Text topNote = new Text(MAX_DEPARTMENT_NAME_LENGTH + " characters remaining.");
+        Text bottomNote = new Text(MAX_DEPARTMENT_DESCRIPTION_LENGTH + " characters remaining.");
+
+        // Configuring the elements
+        departmentNameField.setPromptText("Department name");
         departmentDescriptionField.setPromptText("Department description");
         departmentDescriptionField.setWrapText(true);
+        createNewDepartmentBtn.textProperty().set("Create department");
+
+        // Defining event handlers for interactions with elements
+
+        // Updating the name character limit note as the user types
+        departmentNameField.setOnKeyTyped(e -> {
+            int length = departmentNameField.getLength();
+            topNote.setText(length > MAX_DEPARTMENT_NAME_LENGTH ?
+                    "Your input will be truncated" :
+                    MAX_DEPARTMENT_NAME_LENGTH - length + " characters remaining.");
+        });
+
+        // Updating the description character limit note as the user types
         departmentDescriptionField.setOnKeyTyped(e -> {
             int length = departmentDescriptionField.getLength();
-            bottomNote.setText(length > max_description_length ?
+            bottomNote.setText(length > MAX_DEPARTMENT_DESCRIPTION_LENGTH ?
                     "Your input will be truncated" :
-                    max_description_length - length + " characters remaining.");
+                    MAX_DEPARTMENT_DESCRIPTION_LENGTH - length + " characters remaining.");
         });
-        setDepartmentDescriptionBtn.textProperty().set("Create department");
-        setDepartmentDescriptionBtn.setOnAction(e -> {
-            if (departmentNameField.getLength() == 0) {
+
+        // Handling click on create department button
+        createNewDepartmentBtn.setOnAction(e -> {
+            if (departmentNameField.getLength() == 0) { // A department must have a name
                 WarningPopup.createWarningPopup("No Name Provided", "Department name can not be empty!", dialog);
             } else {
-                String name = departmentNameField.getText().substring(0, Math.min(max_name_length, departmentNameField.getLength()));
-                String description = departmentDescriptionField.getText().substring(0, Math.min(max_description_length, departmentDescriptionField.getLength()));
+                // Ensuring that the name and description not too long, and creating new department
+                String name = departmentNameField.getText().substring(0, Math.min(MAX_DEPARTMENT_NAME_LENGTH, departmentNameField.getLength()));
+                String description = departmentDescriptionField.getText().substring(0, Math.min(MAX_DEPARTMENT_DESCRIPTION_LENGTH, departmentDescriptionField.getLength()));
                 Department department = new Department(name, description);
-                this.model.addDepartment(department);
-                ObservableList<Department> departmentNames = departmentsComboBox.getItems();
-                boolean containsSearchStr = departmentNames.stream().anyMatch(dep -> name.equalsIgnoreCase(dep.getName()));
-                if (containsSearchStr) {
+
+                // Checking if a department with the same name exists
+                if (departmentsComboBox.getItems().stream().anyMatch(dep -> name.equalsIgnoreCase(dep.getName()))) {
                     WarningPopup.createWarningPopup("Department Already Exists", "A department with this name already exists in this company!", dialog);
                 } else {
                     this.model.addDepartment(department);
-                    departmentNames.add(department);
+                    departmentsComboBox.getItems().add(department);
                     this.departmentCountTxt.setText("Number of Departments: " + this.model.getDepartments().size());
                     dialog.close();
                 }
             }
         });
+
+        // Creating layout for the scene
         HBox topHbox = new HBox(departmentNameField, topNote);
         topHbox.setSpacing(10);
-        HBox bottomHbox = new HBox(setDepartmentDescriptionBtn, bottomNote);
+        HBox bottomHbox = new HBox(createNewDepartmentBtn, bottomNote);
         bottomHbox.setSpacing(10);
         VBox dialogVbox = new VBox(topHbox,
                 departmentDescriptionField, bottomHbox);
         dialogVbox.setPadding(new Insets(20, 20, 20, 20));
         dialogVbox.setSpacing(10);
+
+        // Setting the scene on the stage and showing the stage
         Scene dialogScene = new Scene(dialogVbox);
         dialog.setScene(dialogScene);
         dialog.show();
-    }
-
-    @FXML
-    private void editDepartmentDetails(ActionEvent event) {
-        Department choice = departmentsComboBox.getSelectionModel().getSelectedItem();
-        if (!(choice == null)) {
-            displaySelectedDepartment(new ActionEvent());
-            int choiceIndex = this.model.getDepartments().indexOf(choice);
-            int max_name_length = 16;
-            int max_description_length = 270;
-            final Stage dialog = new Stage();
-            dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.initOwner(view.getStage());
-            dialog.setTitle("Edit Department Details");
-            dialog.setResizable(false);
-            TextField departmentNameField = new TextField();
-            TextArea departmentDescriptionField = new TextArea();
-            Button setDepartmentNameBtn = new Button();
-            Button setDepartmentDescriptionBtn = new Button();
-            Text topNote = new Text(max_name_length + " characters remaining.");
-            Text bottomNote = new Text(max_description_length + " characters remaining.");
-            departmentNameField.setPromptText("New department name");
-            departmentNameField.setOnKeyTyped(e -> {
-                int length = departmentNameField.getLength();
-                topNote.setText(length > max_name_length ?
-                        "Your input will be truncated" :
-                        max_name_length - length + " characters remaining.");
-            });
-            departmentDescriptionField.setPromptText("New department description");
-            departmentDescriptionField.setWrapText(true);
-            departmentDescriptionField.setOnKeyTyped(e -> {
-                int length = departmentDescriptionField.getLength();
-                bottomNote.setText(length > max_description_length ?
-                        "Your input will be truncated" :
-                        max_description_length - length + " characters remaining.");
-            });
-            setDepartmentNameBtn.textProperty().set("Set new name");
-            setDepartmentNameBtn.setOnAction(e -> {
-                String name = departmentNameField.getText().substring(0, Math.min(max_name_length, departmentNameField.getLength()));
-                choice.setName(name);
-                this.model.getDepartments().get(choiceIndex).setName(name);
-                departmentsComboBox.getSelectionModel().clearSelection();
-                departmentsComboBox.getSelectionModel().select(choice);
-                selectedDepartmentName.setText("Selected Department: " + choice.getName());
-            });
-            setDepartmentDescriptionBtn.textProperty().set("Set new description");
-            setDepartmentDescriptionBtn.setOnAction(e -> {
-                String description = departmentDescriptionField.getText().substring(0, Math.min(max_description_length, departmentDescriptionField.getLength()));
-                this.model.getDepartments().get(choiceIndex).setDescription(description);
-                departmentDescriptionTxt.setText(choice.getDescription());
-                choice.setDescription(description);
-            });
-            HBox topHbox = new HBox(departmentNameField, topNote, setDepartmentNameBtn);
-            topHbox.setSpacing(10);
-            HBox bottomHbox = new HBox(setDepartmentDescriptionBtn, bottomNote);
-            bottomHbox.setSpacing(10);
-            VBox dialogVbox = new VBox(topHbox,
-                    departmentDescriptionField, bottomHbox);
-            dialogVbox.setPadding(new Insets(20, 20, 20, 20));
-            dialogVbox.setSpacing(10);
-            Scene dialogScene = new Scene(dialogVbox);
-            dialog.setScene(dialogScene);
-            dialog.show();
-        }
-        else {
-            WarningPopup.createWarningPopup("No Department Selected", "Select a department from the dropdown first to edit.", this.view.getStage());
-        }
-
     }
     @FXML
     private void setCompanySalaryBudget(ActionEvent event) {
 
     }
+
+    // === DEPARTMENT SECTION EVENT HANDLERS ============================================================
+
+    @FXML
+    private void selectNewDepartment(ActionEvent event) {
+        // Getting the selected department and displaying its details
+        Department choice = departmentsComboBox.getSelectionModel().getSelectedItem();
+        if (choice != null) {
+            selectedDepartmentName.setText("Selected Department: " + choice.getName());
+            departmentDescriptionTxt.setText(choice.getDescription());
+            selectedDepartmentTeamCount.setText("Number of Teams: " + choice.getTeams().size());
+            selectedDepartmentEmployeeCount.setText("Number of Employees: " + choice.getEmployeeCount());
+            selectedDepartmentBudget.setText("Department Salary Budget: " + choice.getSalaryBudget());
+            selectedDepartmentExpenses.setText("Department Salary Expense: " + choice.getSalaryExpense());
+        } else {    // If selection is empty
+            selectedDepartmentName.setText("Selected Department: ");
+            departmentDescriptionTxt.setText("");
+            selectedDepartmentTeamCount.setText("Number of Teams: ");
+            selectedDepartmentEmployeeCount.setText("Number of Employees: ");
+            selectedDepartmentBudget.setText("Department Salary Budget: ");
+            selectedDepartmentExpenses.setText("Department Salary Expense: ");
+        }
+    }
+    @FXML
+    private void editDepartmentDetails(ActionEvent event) {
+        Department choice = departmentsComboBox.getSelectionModel().getSelectedItem();
+
+        if (choice != null) {   // A department must be selected for editing
+            // Creating a stage on which the user will be able to edit department details
+            final Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(view.getStage());
+            dialog.setTitle("Edit Department Details");
+            dialog.setResizable(false);
+
+            // Defining the elements on the stage
+            TextField departmentNameField = new TextField();
+            TextArea departmentDescriptionField = new TextArea();
+            Button setDepartmentNameBtn = new Button();
+            Button setDepartmentDescriptionBtn = new Button();
+            Text topNote = new Text(MAX_DEPARTMENT_NAME_LENGTH + " characters remaining.");
+            Text bottomNote = new Text(MAX_DEPARTMENT_DESCRIPTION_LENGTH + " characters remaining.");
+
+            // Configuring elements
+            departmentNameField.setPromptText("New department name");
+            departmentDescriptionField.setPromptText("New department description");
+            departmentDescriptionField.setWrapText(true);
+            setDepartmentNameBtn.textProperty().set("Set new name");
+            setDepartmentDescriptionBtn.textProperty().set("Set new description");
+
+            // Defining event handlers for interactions with elements
+
+            // Updating the name character limit note as the user types
+            departmentNameField.setOnKeyTyped(e -> {
+                int length = departmentNameField.getLength();
+                topNote.setText(length > MAX_DEPARTMENT_NAME_LENGTH ?
+                        "Your input will be truncated" :
+                        MAX_DEPARTMENT_NAME_LENGTH - length + " characters remaining.");
+            });
+
+            // Updating the description character limit note as the user types
+            departmentDescriptionField.setOnKeyTyped(e -> {
+                int length = departmentDescriptionField.getLength();
+                bottomNote.setText(length > MAX_DEPARTMENT_DESCRIPTION_LENGTH ?
+                        "Your input will be truncated" :
+                        MAX_DEPARTMENT_DESCRIPTION_LENGTH - length + " characters remaining.");
+            });
+
+            // Updating the name of the department on set department name button click
+            setDepartmentNameBtn.setOnAction(e -> {
+                // Ensuring that the name is not too long
+                String name = departmentNameField.getText().substring(0, Math.min(MAX_DEPARTMENT_NAME_LENGTH, departmentNameField.getLength()));
+
+                // Checking that the name is not empty and that an existing department doesn't have the same name
+                if (name.length() == 0) {
+                    WarningPopup.createWarningPopup("No Name Provided", "Department name can not be empty!", dialog);
+                } else if (departmentsComboBox.getItems().stream().anyMatch(dep -> name.equalsIgnoreCase(dep.getName()))) {
+                    WarningPopup.createWarningPopup("Department Already Exists", "A department with this name already exists in this company!", dialog);
+                } else {
+                    choice.setName(name);
+                    // Selecting and re-selecting so that the comboBox updates, which in turn updates the displayed details
+                    departmentsComboBox.getSelectionModel().clearSelection();
+                    departmentsComboBox.getSelectionModel().select(choice);
+                }
+            });
+
+            // Updating the description of the department on set department description button click
+            setDepartmentDescriptionBtn.setOnAction(e -> {
+                String description = departmentDescriptionField.getText().substring(0, Math.min(MAX_DEPARTMENT_DESCRIPTION_LENGTH, departmentDescriptionField.getLength()));
+                choice.setDescription(description);
+                departmentDescriptionTxt.setText(choice.getDescription());
+            });
+
+            // Creating layout for the scene
+            HBox topHbox = new HBox(departmentNameField, topNote, setDepartmentNameBtn);
+            topHbox.setSpacing(10);
+            HBox bottomHbox = new HBox(setDepartmentDescriptionBtn, bottomNote);
+            bottomHbox.setSpacing(10);
+            VBox dialogVbox = new VBox(topHbox, departmentDescriptionField, bottomHbox);
+            dialogVbox.setPadding(new Insets(20, 20, 20, 20));
+            dialogVbox.setSpacing(10);
+
+            // Setting a scene on the stage and showing the stage
+            Scene dialogScene = new Scene(dialogVbox);
+            dialog.setScene(dialogScene);
+            dialog.show();
+        }
+        else {  // Cannot edit a department if no department is selected
+            WarningPopup.createWarningPopup("No Department Selected", "Select a department from the dropdown first to edit.", this.view.getStage());
+        }
+
+    }
+    @FXML
+    private void deleteDepartment(ActionEvent event) {
+        Department choice = departmentsComboBox.getSelectionModel().getSelectedItem();
+
+        if (choice != null) {   // A department must be selected for deletion
+            // Creating a stage on which the user will be able to confirm deletion
+            final Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(view.getStage());
+            dialog.setTitle("Deletion Confirmation");
+            dialog.setResizable(false);
+
+            // Defining the elements on the stage
+            TextFlow confirmationText = new TextFlow();
+            Text text1 = new Text("Are you sure you would like to delete the " );
+            Text departmentName = new Text(choice.getName());
+            Text text2 = new Text(" department? All teams and employees belonging to this department " +
+                    "will be deleted / fired. This is an irreversible action.");
+            Button deletionConfirmationBtn = new Button();
+
+            // Configuring elements
+            departmentName.setStyle("-fx-font-weight: bold");
+            confirmationText.getChildren().addAll(text1, departmentName, text2);
+            deletionConfirmationBtn.textProperty().set("Delete Department");
+
+            // Defining event handler for click on delete confirmation
+            deletionConfirmationBtn.setOnAction(e -> {
+                departmentsComboBox.getItems().remove(choice);
+                this.model.removeDepartment(choice);
+                // Updating the company details UI to reflect the changes resulting from the department deletion
+                updateCompanyDetailsUI();
+                dialog.close();
+            });
+
+            // Creating layout for the scene
+            VBox dialogVbox = new VBox(confirmationText, deletionConfirmationBtn);
+            dialogVbox.setPadding(new Insets(20, 20, 20, 20));
+            dialogVbox.setSpacing(10);
+
+            // Setting a scene on the stage and showing the stage
+            Scene dialogScene = new Scene(dialogVbox, 500, 100);
+            dialog.setScene(dialogScene);
+            dialog.show();
+        } else {    // Cannot delete a department if no department is selected
+            WarningPopup.createWarningPopup("No Department Selected", "Select a department from the " +
+                    "dropdown first to delete.", this.view.getStage());
+        }
+    }
+
+    // === TEAM SECTION EVENT HANDLERS ===================================================================
+
+    // === EMPLOYEE SECTION EVENT HANDLERS ===============================================================
 
 }
