@@ -26,6 +26,13 @@ public class Department {
         this.salaryBudget = 0.0;
         this.salaryExpense = 0.0;
     }
+    /**
+     * Appends the specified teams object to the end of the department's list of teams.
+     * @param team element to be added to the department's list of teams.
+     */
+    public void addTeam(Team team){this.teams.add(team);}
+
+
 
     /**
      * Returns a list of the department's teams.
