@@ -422,10 +422,11 @@ public class MainController {
     private void createNewTeam(ActionEvent event) {
         // Creating a stage on which the user will be able to create a new team
         Department choice = departmentsComboBox.getSelectionModel().getSelectedItem();
-        final Stage dialog = new Stage();
+
         if (choice == null) {
-            WarningPopup.createWarningPopup("No Department selected", "Cannot add a team without a specified department", dialog);
+            WarningPopup.createWarningPopup("No Department selected", "Cannot add a team without a specified department", this.view.getStage());
         } else {
+            final Stage dialog = new Stage();
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initOwner(view.getStage());
             dialog.setTitle("Create New Team");
@@ -462,7 +463,6 @@ public class MainController {
                         MAX_TEAM_DESCRIPTION_LENGTH - length + " characters remaining.");
             });
 
-
             // Handling click on create team button
             createNewTeamBtn.setOnAction(e -> {
                 // checking if the user has selected a department to add a team to or not
@@ -479,19 +479,12 @@ public class MainController {
                     if (teamsComboBox.getItems().stream().anyMatch(t -> name.equalsIgnoreCase(t.getName()))) {
                         WarningPopup.createWarningPopup("Team Already Exists", "A team with this name already exists in this company!", dialog);
                     } else {
-                        //int chosen_department = this.model.getDepartments().indexOf(choice);
-
                         choice.addTeam(team);
                         teamsComboBox.getItems().add(team);
                         this.model.incrementTeamCount(1);
                         this.teamCountTxt.setText("Number of Teams: " + model.getTeamCount());
                         this.selectedDepartmentTeamCount.setText("Number of Teams: " + choice.getTeams().size());
-//                        int chosen_department = this.model.getDepartments().indexOf(choice);
-//                        this.model.getDepartments().get(chosen_department).addTeam(team);
-//                        teamsComboBox.getItems().add(team);
-//                        this.teamCountTxt.setText("Number of Teams: " + this.model.getDepartments().get(chosen_department).getTeams().size());
                         dialog.close();
-
                     }
                 }
 

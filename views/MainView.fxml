@@ -49,7 +49,7 @@
             <Button layoutX="237.0" layoutY="126.0" mnemonicParsing="false" onAction="#createNewTeam" prefHeight="26.0" prefWidth="120.0" text="Create New Team" />
             <Button layoutX="237.0" layoutY="13.0" mnemonicParsing="false" onAction="#editDepartmentDetails" prefHeight="26.0" prefWidth="120.0" text="Edit Department" />
             <ComboBox fx:id="departmentsComboBox" layoutX="110.0" layoutY="13.0" onAction="#selectNewDepartment" prefHeight="26.0" prefWidth="120.0" />
-            <ComboBox fx:id="teamsComboBox" layoutX="110.0" layoutY="179.0" onAction="#selectNewDepartment" prefHeight="26.0" prefWidth="120.0" />
+            <ComboBox fx:id="teamsComboBox" layoutX="110.0" layoutY="179.0" prefHeight="26.0" prefWidth="120.0" />
             <Text fx:id="selectedDepartmentName" layoutX="10.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Department:" />
          </children>
       </AnchorPane>
