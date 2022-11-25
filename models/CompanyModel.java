@@ -75,6 +75,11 @@ public class CompanyModel {
      * @return the count of teams in the company.
      */
     public int getTeamCount() {return this.teamCount;}
+    /**
+     * Increments the team count
+     *
+     */
+    public void incrementTeamCount(int inc){this.teamCount += inc;}
 
     /**
      * Returns the count of employees in the company.

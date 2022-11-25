@@ -9,9 +9,9 @@ public class Team {
 
 
     /**
-     * Constructs a Department object with the specified name and description.
-     * @param name Name to be given to the department.
-     * @param description Description to be given to the department.
+     * Constructs a Team object with the specified name and description.
+     * @param name Name to be given to the team.
+     * @param description Description to be given to the team.
      */
     public Team(String name, String description) {
         this.name = name;
