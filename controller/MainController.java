@@ -17,8 +17,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.CompanyModel;
 import models.Department;
+import models.Team;
 import views.MainView;
 import views.WarningPopup;
+import java.util.ArrayList;
 
 /**
  * Controller class responsible for handling events invoked by view elements, and updating the model and the view
@@ -98,7 +100,8 @@ public class MainController {
     private Text selectedDepartmentEmployeeCount;
 
     // === TEAM SECTION UI ELEMENTS ======================================================================
-
+    @FXML
+    private ComboBox<Team> teamsComboBox;
 
     // === COMPANY SECTION EVENT HANDLERS ================================================================
     
@@ -415,7 +418,94 @@ public class MainController {
     }
 
     // === TEAM SECTION EVENT HANDLERS ===================================================================
+    @FXML
+    private void createNewTeam(ActionEvent event) {
+        // Creating a stage on which the user will be able to create a new team
+        Department choice = departmentsComboBox.getSelectionModel().getSelectedItem();
 
+        if (choice == null) {
+            WarningPopup.createWarningPopup("No Department selected", "Cannot add a team without a specified department", this.view.getStage());
+        } else {
+            final Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(view.getStage());
+            dialog.setTitle("Create New Team");
+            dialog.setResizable(false);
+
+            // Defining the elements on the stage
+            TextField teamNameField = new TextField();
+            TextArea teamDescriptionField = new TextArea();
+            Button createNewTeamBtn = new Button();
+            Text topNote = new Text(MAX_TEAM_NAME_LENGTH + " characters remaining.");
+            Text bottomNote = new Text(MAX_TEAM_DESCRIPTION_LENGTH + " characters remaining.");
+
+            // Configuring the elements
+            teamNameField.setPromptText("Team name");
+            teamDescriptionField.setPromptText("Team description");
+            teamDescriptionField.setWrapText(true);
+            createNewTeamBtn.textProperty().set("Create Team");
+
+            // Defining event handlers for interactions with elements
+
+            // Updating the name character limit note as the user types
+            teamNameField.setOnKeyTyped(e -> {
+                int length = teamNameField.getLength();
+                topNote.setText(length > MAX_TEAM_NAME_LENGTH ?
+                        "Your input will be truncated" :
+                        MAX_TEAM_NAME_LENGTH - length + " characters remaining.");
+            });
+
+            // Updating the description character limit note as the user types
+            teamDescriptionField.setOnKeyTyped(e -> {
+                int length = teamDescriptionField.getLength();
+                bottomNote.setText(length > MAX_TEAM_DESCRIPTION_LENGTH ?
+                        "Your input will be truncated" :
+                        MAX_TEAM_DESCRIPTION_LENGTH - length + " characters remaining.");
+            });
+
+            // Handling click on create team button
+            createNewTeamBtn.setOnAction(e -> {
+                // checking if the user has selected a department to add a team to or not
+
+                if (teamNameField.getLength() == 0) { // A team must have a name
+                    WarningPopup.createWarningPopup("No Name Provided", "Team name can not be empty!", dialog);
+                } else {
+                    // Ensuring that the name and description not too long, and creating new department
+                    String name = teamNameField.getText().substring(0, Math.min(MAX_TEAM_NAME_LENGTH, teamNameField.getLength()));
+                    String description = teamDescriptionField.getText().substring(0, Math.min(MAX_TEAM_DESCRIPTION_LENGTH, teamDescriptionField.getLength()));
+                    Team team = new Team(name, description);
+
+                    // Checking if a team with the same name exists
+                    if (teamsComboBox.getItems().stream().anyMatch(t -> name.equalsIgnoreCase(t.getName()))) {
+                        WarningPopup.createWarningPopup("Team Already Exists", "A team with this name already exists in this company!", dialog);
+                    } else {
+                        choice.addTeam(team);
+                        teamsComboBox.getItems().add(team);
+                        this.model.incrementTeamCount(1);
+                        this.teamCountTxt.setText("Number of Teams: " + model.getTeamCount());
+                        this.selectedDepartmentTeamCount.setText("Number of Teams: " + choice.getTeams().size());
+                        dialog.close();
+                    }
+                }
+
+            });
+
+            // Creating layout for the scene
+            HBox topHbox = new HBox(teamNameField, topNote);
+            topHbox.setSpacing(10);
+            HBox bottomHbox = new HBox(createNewTeamBtn, bottomNote);
+            bottomHbox.setSpacing(10);
+            VBox dialogVbox = new VBox(topHbox,
+                    teamDescriptionField, bottomHbox);
+            dialogVbox.setPadding(new Insets(20, 20, 20, 20));
+            dialogVbox.setSpacing(10);
+
+            // Setting the scene on the stage and showing the stage
+            Scene dialogScene = new Scene(dialogVbox);
+            dialog.setScene(dialogScene);
+            dialog.show();
+        }
+    }
     // === EMPLOYEE SECTION EVENT HANDLERS ===============================================================
 
 }

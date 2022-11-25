@@ -46,9 +46,10 @@
             <Text fx:id="selectedDepartmentTeamCount" layoutX="10.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Teams:" />
             <Text fx:id="selectedDepartmentEmployeeCount" layoutX="10.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Employees:" />
             <Button layoutX="237.0" layoutY="159.0" mnemonicParsing="false" onAction="#deleteDepartment" prefHeight="26.0" prefWidth="120.0" text="Delete Department" />
-<!--            <Button layoutX="237.0" layoutY="126.0" mnemonicParsing="false" onAction="#createNewTeam" prefHeight="26.0" prefWidth="120.0" text="Create New Team" />-->
+            <Button layoutX="237.0" layoutY="126.0" mnemonicParsing="false" onAction="#createNewTeam" prefHeight="26.0" prefWidth="120.0" text="Create New Team" />
             <Button layoutX="237.0" layoutY="13.0" mnemonicParsing="false" onAction="#editDepartmentDetails" prefHeight="26.0" prefWidth="120.0" text="Edit Department" />
             <ComboBox fx:id="departmentsComboBox" layoutX="110.0" layoutY="13.0" onAction="#selectNewDepartment" prefHeight="26.0" prefWidth="120.0" />
+            <ComboBox fx:id="teamsComboBox" layoutX="110.0" layoutY="179.0" prefHeight="26.0" prefWidth="120.0" />
             <Text fx:id="selectedDepartmentName" layoutX="10.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Department:" />
          </children>
       </AnchorPane>
