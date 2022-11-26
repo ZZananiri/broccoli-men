@@ -73,6 +73,12 @@ public class Team {
         return this.salaryExpense;
     }
 
+    /**
+     * Appends the specified employee object to the end of the teams list of employees.
+     * @param employee element to be added to the teams list of employees.
+     */
+    public void addEmployee(Employee employee){this.employees.add(employee);}
+
     @Override
     public String toString() {
         return this.getName();
