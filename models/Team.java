@@ -5,7 +5,10 @@ import java.util.ArrayList;
 public class Team {
     private ArrayList<Employee> employees;  // list of all the employees contained in the team
     private String name;    // Name of the team
-    private String description; // A description of the
+    private String description; // A description of the team
+    private int employees_count; // Number of employees in the team
+    private double salaryBudget; // Budget of salary of the team
+    private double salaryExpense; // The salary expense of the
 
 
     /**
@@ -17,7 +20,9 @@ public class Team {
         this.name = name;
         this.description = description;
         this.employees = new ArrayList<Employee>();
-
+        this.employees_count = 0;
+        this.salaryBudget = 0.0;
+        this.salaryExpense = 0.0;
     }
 
     /**
@@ -48,6 +53,33 @@ public class Team {
      */
     public void setDescription(String description) {this.description = description; }
 
+    /**
+     * Returns the list of employees in the team.
+     * @return arraylist of employees in the team
+     */
+    public ArrayList<Employee> getEmployees() {return this.employees;}
+
+    /**
+     * Returns the count of employees in the team.
+     * @return the count of employees in the team.
+     */
+    public int getEmployeeCount() {return this.employees_count;}
+
+    /**
+     * Returns the team's salary budget.
+     * @return the team's salary budget.
+     */
+    public double getSalaryBudget() {
+        return this.salaryBudget;
+    }
+
+    /**
+     * Returns the team's salary expense.
+     * @return the team's salary expense.
+     */
+    public double getSalaryExpense() {
+        return this.salaryExpense;
+    }
 
     @Override
     public String toString() {
