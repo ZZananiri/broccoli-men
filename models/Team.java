@@ -20,7 +20,6 @@ public class Team {
         this.name = name;
         this.description = description;
         this.employees = new ArrayList<Employee>();
-        this.employees_count = 0;
         this.salaryBudget = 0.0;
         this.salaryExpense = 0.0;
     }
@@ -58,12 +57,6 @@ public class Team {
      * @return arraylist of employees in the team
      */
     public ArrayList<Employee> getEmployees() {return this.employees;}
-
-    /**
-     * Returns the count of employees in the team.
-     * @return the count of employees in the team.
-     */
-    public int getEmployeeCount() {return this.employees_count;}
 
     /**
      * Returns the team's salary budget.
