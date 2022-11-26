@@ -17,21 +17,37 @@ public class Employee{
      * @param gender Gender to be given to the employee.
      * @param age Age to be given to the employee.
      */
-    public Employee(String firstName, String lastName, float salary, String gender, int age) {
+    public Employee(String firstName, String lastName, float salary, String gender, int age, int employeeID) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.salary = salary;
         this.gender = gender;
         this.age = age;
-        this.employeeID = Objects.hash(this.firstName, this.lastName, this.salary, this.gender, this.age);
+        this.employeeID = employeeID;
     }
 
     /**
-     * Returns the employee's name.
-     * @return the employee's name.
+     * Returns the employee's full name.
+     * @return the employee's full name.
      */
-    public String getName() {
+    public String getFullName() {
         return this.firstName + this.lastName;
+    }
+
+    /**
+     * Returns the employee's first name.
+     * @return the employee's first name.
+     */
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+    /**
+     * Returns the employee's last name.
+     * @return the employee's last name.
+     */
+    public String getLastName() {
+        return this.lastName;
     }
 
     /**

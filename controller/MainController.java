@@ -40,6 +40,7 @@ public class MainController {
     private final int MAX_EMPLOYEE_LAST_NAME_LENGTH = 10;
     private final int MAX_EMPLOYEE_SALARY_LENGTH = 10;
     private final int MAX_EMPLOYEE_AGE_LENGTH = 2;
+    private int EMPLOYEE_ID = 1000;
 
     private CompanyModel model; // The model of the company
     private MainView view;  // The view in which this controller is responsible for
@@ -648,23 +649,15 @@ public class MainController {
                         String salaryString = employeeSalaryField.getText().substring(0, Math.min(MAX_EMPLOYEE_SALARY_LENGTH, employeeSalaryField.getLength()));
                         float salary = (float) (Math.round(Float.parseFloat(salaryString) * 100.0) / 100.0);
                         String gender = employeeGenderGroup.getSelectedToggle().getUserData().toString();
-                        Employee employee = new Employee(firstName, lastName, salary, gender, age);
-
-                        // Checking if an employee with the same employeeID exists
-                        boolean flag = true;
-                        for (Team team : teamsComboBox.getItems()){
-                            if (team.getEmployees().stream().anyMatch(employee1 -> employee1.getEmployeeID() == employee.getEmployeeID())){
-                                WarningPopup.createWarningPopup("Employee Already Exists", "An employee with these details already exists in this company!", dialog);
-                                flag = false;
-                                break;
-                            }
-                        }
-                        if (flag){
-                            choice.addEmployee(employee);
-                            this.model.incrementEmployeeCount(1);
-                            this.employeeCountTxt.setText("Number of Employees: " + model.getEmployeeCount());
-                            dialog.close();
-                        }
+                        Employee employee = new Employee(firstName, lastName, salary, gender, age, EMPLOYEE_ID);
+                        EMPLOYEE_ID ++;
+                        choice.addEmployee(employee);
+                        this.model.incrementEmployeeCount(1);
+                        departmentsComboBox.getSelectionModel().getSelectedItem().incrementEmployeeCount(1);
+                        this.selectedDepartmentEmployeeCount.setText("Number of Employees: " + departmentsComboBox.getSelectionModel().getSelectedItem().getEmployeeCount());
+                        this.selectedTeamEmployeeCount.setText("Number of Employees: " + choice.getEmployees().size());
+                        this.employeeCountTxt.setText("Number of Employees: " + model.getEmployeeCount());
+                        dialog.close();
                     } catch (NumberFormatException ex) {
                         WarningPopup.createWarningPopup("Wrong Input Types", "Employee age or salary cannot be a String!", dialog);
                     }
