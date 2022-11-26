@@ -1,14 +1,10 @@
 package controller;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -18,9 +14,9 @@ import javafx.stage.Stage;
 import models.CompanyModel;
 import models.Department;
 import models.Team;
+import models.Employee;
 import views.MainView;
 import views.WarningPopup;
-import java.util.ArrayList;
 
 /**
  * Controller class responsible for handling events invoked by view elements, and updating the model and the view
@@ -38,6 +34,13 @@ public class MainController {
     // Team names and descriptions are not to exceed these lengths
     private final int MAX_TEAM_NAME_LENGTH = 20;
     private final int MAX_TEAM_DESCRIPTION_LENGTH = 95;
+
+    // Employee names and salaries are not to exceed these lengths
+    private final int MAX_EMPLOYEE_FIRST_NAME_LENGTH = 10;
+    private final int MAX_EMPLOYEE_LAST_NAME_LENGTH = 10;
+    private final int MAX_EMPLOYEE_SALARY_LENGTH = 10;
+    private final int MAX_EMPLOYEE_AGE_LENGTH = 2;
+    private int EMPLOYEE_ID = 1000;
 
     private CompanyModel model; // The model of the company
     private MainView view;  // The view in which this controller is responsible for
@@ -114,7 +117,10 @@ public class MainController {
     private Text selectedTeamEmployeeCount;
 
     // === COMPANY SECTION EVENT HANDLERS ================================================================
-    
+    @FXML
+    private Text selectedEmployeeName;
+    @FXML
+    private Text selectedEmployeeSalary;
     @FXML
     private void editCompanyDetails(ActionEvent event) {
         // Creating a stage on which the user will be able to edit company details
@@ -537,5 +543,152 @@ public class MainController {
     }
 
     // === EMPLOYEE SECTION EVENT HANDLERS ===============================================================
+    @FXML
+    private void hireNewEmployee(ActionEvent event) {
+        // Creating a stage on which the user will be able to create a new team
+        Team choice = teamsComboBox.getSelectionModel().getSelectedItem();
+        // checking if the user has selected a department to add a team to or not
+        if (choice == null) {
+            WarningPopup.createWarningPopup("No Team selected", "Cannot add a employee without a specified team", this.view.getStage());
+        } else {
+            final Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(view.getStage());
+            dialog.setTitle("Create New Employee");
+            dialog.setResizable(false);
+
+            // Defining the elements on the stage
+            TextField employeeFirstNameField = new TextField();
+            TextField employeeLastNameField = new TextField();
+            TextField employeeSalaryField = new TextField();
+            ToggleGroup employeeGenderGroup = new ToggleGroup();
+            TextField employeeAgeField = new TextField();
+            Button hireNewEmployeeBtn = new Button();
+            Text firstNameNote = new Text(MAX_EMPLOYEE_FIRST_NAME_LENGTH + " characters remaining.");
+            Text lastNameNote = new Text(MAX_EMPLOYEE_LAST_NAME_LENGTH + " characters remaining.");
+            Text salaryNote = new Text(MAX_EMPLOYEE_SALARY_LENGTH + " characters remaining.");
+            Text ageNote = new Text(MAX_EMPLOYEE_AGE_LENGTH + " characters remaining.");
+
+            // Configuring the elements
+            employeeFirstNameField.setPromptText("Employee first name");
+            employeeLastNameField.setPromptText("Employee last name");
+            employeeSalaryField.setPromptText("Employee salary");
+            employeeAgeField.setPromptText("Employee age");
+            hireNewEmployeeBtn.textProperty().set("Hire Employee");
+
+            // Defining event handlers for interactions with elements
+
+            // Updating the first name character limit note as the user types
+            employeeFirstNameField.setOnKeyTyped(e -> {
+                int length = employeeFirstNameField.getLength();
+                firstNameNote.setText(length > MAX_EMPLOYEE_FIRST_NAME_LENGTH ?
+                        "Your input will be truncated" :
+                        MAX_EMPLOYEE_FIRST_NAME_LENGTH - length + " characters remaining.");
+            });
+
+            // Updating the last name character limit note as the user types
+            employeeLastNameField.setOnKeyTyped(e -> {
+                int length = employeeLastNameField.getLength();
+                lastNameNote.setText(length > MAX_EMPLOYEE_LAST_NAME_LENGTH ?
+                        "Your input will be truncated" :
+                        MAX_EMPLOYEE_LAST_NAME_LENGTH - length + " characters remaining.");
+            });
+
+            // Updating the salary character limit note as the user types
+            employeeSalaryField.setOnKeyTyped(e -> {
+                int length = employeeSalaryField.getLength();
+                salaryNote.setText(length > MAX_EMPLOYEE_SALARY_LENGTH ?
+                        "Your input will be truncated" :
+                        MAX_EMPLOYEE_SALARY_LENGTH - length + " characters remaining.");
+            });
+
+            // Updating the age character limit note as the user types
+            employeeAgeField.setOnKeyTyped(e -> {
+                int length = employeeAgeField.getLength();
+                ageNote.setText(length > MAX_EMPLOYEE_AGE_LENGTH ?
+                        "Your input will be truncated" :
+                        MAX_EMPLOYEE_AGE_LENGTH - length + " characters remaining.");
+            });
+
+            // Setting up gender buttons
+            RadioButton employeeGenderMaleButton = new RadioButton("Male");
+            employeeGenderMaleButton.setUserData("Male");
+            employeeGenderMaleButton.setToggleGroup(employeeGenderGroup);
+            employeeGenderMaleButton.setSelected(true);
+
+            RadioButton employeeGenderFemaleButton = new RadioButton("Female");
+            employeeGenderFemaleButton.setUserData("Female");
+            employeeGenderFemaleButton.setToggleGroup(employeeGenderGroup);
+
+            RadioButton employeeGenderTransButton = new RadioButton("Transgender");
+            employeeGenderTransButton.setUserData("Transgender");
+            employeeGenderTransButton.setToggleGroup(employeeGenderGroup);
+
+            RadioButton employeeGenderNonBinaryButton = new RadioButton("Non-Binary");
+            employeeGenderNonBinaryButton.setUserData("Non-Binary");
+            employeeGenderNonBinaryButton.setToggleGroup(employeeGenderGroup);
+
+            RadioButton employeeGenderNoResponseButton = new RadioButton("Prefer not to answer");
+            employeeGenderNoResponseButton.setUserData("Prefer not to answer");
+            employeeGenderNoResponseButton.setToggleGroup(employeeGenderGroup);
+
+            // Handling click on create team button
+            hireNewEmployeeBtn.setOnAction(e -> {
+                // Checking if inputs are not null
+                if (employeeFirstNameField.getLength() == 0 || employeeLastNameField.getLength() == 0 || employeeSalaryField.getLength() == 0 || employeeAgeField.getLength() == 0 || employeeGenderGroup.getSelectedToggle() == null) { // A team must have a name
+                    WarningPopup.createWarningPopup("Complete Details Not Provided", "Employee details can not be empty!", dialog);
+                }
+                else {
+                    // Ensuring that the employee details not too long, and creating new employee
+
+                    // Checking for appropriate input types
+                    try{
+                        String firstName = employeeFirstNameField.getText().substring(0, Math.min(MAX_EMPLOYEE_FIRST_NAME_LENGTH, employeeFirstNameField.getLength()));
+                        String lastName = employeeLastNameField.getText().substring(0, Math.min(MAX_EMPLOYEE_LAST_NAME_LENGTH, employeeLastNameField.getLength()));
+                        int age = Integer.parseInt(employeeAgeField.getText().substring(0, Math.min(MAX_EMPLOYEE_AGE_LENGTH, employeeAgeField.getLength())));
+                        String salaryString = employeeSalaryField.getText().substring(0, Math.min(MAX_EMPLOYEE_SALARY_LENGTH, employeeSalaryField.getLength()));
+                        float salary = (float) (Math.round(Float.parseFloat(salaryString) * 100.0) / 100.0);
+                        String gender = employeeGenderGroup.getSelectedToggle().getUserData().toString();
+                        Employee employee = new Employee(firstName, lastName, salary, gender, age, EMPLOYEE_ID);
+                        EMPLOYEE_ID ++;
+                        choice.addEmployee(employee);
+                        this.model.incrementEmployeeCount(1);
+                        departmentsComboBox.getSelectionModel().getSelectedItem().incrementEmployeeCount(1);
+                        this.selectedDepartmentEmployeeCount.setText("Number of Employees: " + departmentsComboBox.getSelectionModel().getSelectedItem().getEmployeeCount());
+                        this.selectedTeamEmployeeCount.setText("Number of Employees: " + choice.getEmployees().size());
+                        this.employeeCountTxt.setText("Number of Employees: " + model.getEmployeeCount());
+                        dialog.close();
+                    } catch (NumberFormatException ex) {
+                        WarningPopup.createWarningPopup("Wrong Input Types", "Employee age or salary cannot be a String!", dialog);
+                    }
+
+                }
+
+            });
+
+            // Creating layout for the scene
+            HBox firstNameHbox = new HBox(new Text("First Name:"), employeeFirstNameField, firstNameNote);
+            firstNameHbox.setSpacing(10);
+            HBox lastNameHbox = new HBox(new Text("Last Name:"), employeeLastNameField, lastNameNote);
+            lastNameHbox.setSpacing(10);
+            HBox salaryHbox = new HBox(new Text("Salary:"), employeeSalaryField, salaryNote);
+            salaryHbox.setSpacing(10);
+            HBox genderbox = new HBox(new Text("Gender:"));
+            HBox genderHbox = new HBox(employeeGenderMaleButton, employeeGenderFemaleButton, employeeGenderTransButton, employeeGenderNonBinaryButton, employeeGenderNoResponseButton);
+            genderHbox.setSpacing(10);
+            HBox ageHbox = new HBox(new Text("Age:"), employeeAgeField, ageNote);
+            ageHbox.setSpacing(10);
+            HBox bottomHbox = new HBox(hireNewEmployeeBtn);
+            bottomHbox.setSpacing(10);
+            VBox dialogVbox = new VBox(firstNameHbox, lastNameHbox, salaryHbox, genderbox, genderHbox, ageHbox, bottomHbox);
+            dialogVbox.setPadding(new Insets(20, 20, 20, 20));
+            dialogVbox.setSpacing(10);
+
+            // Setting the scene on the stage and showing the stage
+            Scene dialogScene = new Scene(dialogVbox);
+            dialog.setScene(dialogScene);
+            dialog.show();
+        }
+    }
 
 }

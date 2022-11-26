@@ -82,6 +82,12 @@ public class Department {
     public int getEmployeeCount() {return this.employeeCount;}
 
     /**
+     * Increments the employee count
+     *
+     */
+    public void incrementEmployeeCount(int inc){this.employeeCount += inc;}
+
+    /**
      * Returns the department's salary budget.
      * @return the department's salary budget.
      */
