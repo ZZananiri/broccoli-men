@@ -49,9 +49,21 @@
             <Button layoutX="237.0" layoutY="126.0" mnemonicParsing="false" onAction="#createNewTeam" prefHeight="26.0" prefWidth="120.0" text="Create New Team" />
             <Button layoutX="237.0" layoutY="13.0" mnemonicParsing="false" onAction="#editDepartmentDetails" prefHeight="26.0" prefWidth="120.0" text="Edit Department" />
             <ComboBox fx:id="departmentsComboBox" layoutX="110.0" layoutY="13.0" onAction="#selectNewDepartment" prefHeight="26.0" prefWidth="120.0" />
-            <ComboBox fx:id="teamsComboBox" layoutX="110.0" layoutY="179.0" prefHeight="26.0" prefWidth="120.0" />
             <Text fx:id="selectedDepartmentName" layoutX="10.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Department:" />
+
+            <Text layoutX="10.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Teams:" wrappingWidth="175.0">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Text>
+            <Text fx:id="selectedTeamBudget" layoutX="10.0" layoutY="305.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team Salary Budget: " />
+            <Text fx:id="teamDescriptionTxt" fill="#4b4b4b" layoutX="10.0" layoutY="268.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description of selected team would appear here." wrappingWidth="340.0" />
+            <Text fx:id="selectedTeamExpenses" layoutX="10.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team Salary Expense: " />
+            <Text fx:id="selectedTeamEmployeeCount" layoutX="10.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Employees:" />
+            <ComboBox fx:id="teamsComboBox" layoutX="110.0" layoutY="202.0" onAction="#selectNewTeam" prefHeight="26.0" prefWidth="120.0" />
+            <Text fx:id="selectedTeamName" layoutX="10.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Team:" />
          </children>
       </AnchorPane>
+
    </children>
 </AnchorPane>

@@ -102,6 +102,16 @@ public class MainController {
     // === TEAM SECTION UI ELEMENTS ======================================================================
     @FXML
     private ComboBox<Team> teamsComboBox;
+    @FXML
+    private Text selectedTeamName;
+    @FXML
+    private Text teamDescriptionTxt;
+    @FXML
+    private Text selectedTeamBudget;
+    @FXML
+    private Text selectedTeamExpenses;
+    @FXML
+    private Text selectedTeamEmployeeCount;
 
     // === COMPANY SECTION EVENT HANDLERS ================================================================
     
@@ -506,6 +516,26 @@ public class MainController {
             dialog.show();
         }
     }
+    @FXML
+    private void selectNewTeam(ActionEvent event) {
+        // Getting the selected team and displaying its details
+        Team choice = teamsComboBox.getSelectionModel().getSelectedItem();
+        if (choice != null) {
+            selectedTeamName.setText("Selected Team: " + choice.getName());
+            teamDescriptionTxt.setText(choice.getDescription());
+            selectedTeamEmployeeCount.setText("Number of employees: " + choice.getEmployees().size());
+            selectedTeamBudget.setText("Team Salary Budget: " + choice.getSalaryBudget());
+            selectedTeamExpenses.setText("Team Salary Expense: " + choice.getSalaryExpense());
+        } else {    // If selection is empty
+            selectedDepartmentName.setText("Selected Team: ");
+            departmentDescriptionTxt.setText("");
+            selectedDepartmentTeamCount.setText("Number of Teams: ");
+            selectedDepartmentEmployeeCount.setText("Number of Employees: ");
+            selectedDepartmentBudget.setText("Team Salary Budget: ");
+            selectedDepartmentExpenses.setText("Team Salary Expense: ");
+        }
+    }
+
     // === EMPLOYEE SECTION EVENT HANDLERS ===============================================================
 
 }

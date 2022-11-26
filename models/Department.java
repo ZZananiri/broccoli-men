@@ -32,7 +32,12 @@ public class Department {
      */
     public void addTeam(Team team){this.teams.add(team);}
 
-
+    /**
+     * Removes the first occurrence of the specified team object in the department's list of teams.
+     * The department's list of teams is unchanged if it doesn't contain the team object argument.
+     * @param team element to be removed from department's list of teams, if contained.
+     */
+    public void removeTeam(Team team) {this.teams.remove(team);}
 
     /**
      * Returns a list of the department's teams.
