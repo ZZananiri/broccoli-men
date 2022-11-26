@@ -6,7 +6,6 @@ public class Team {
     private ArrayList<Employee> employees;  // list of all the employees contained in the team
     private String name;    // Name of the team
     private String description; // A description of the team
-    private int employees_count; // Number of employees in the team
     private double salaryBudget; // Budget of salary of the team
     private double salaryExpense; // The salary expense of the
 
