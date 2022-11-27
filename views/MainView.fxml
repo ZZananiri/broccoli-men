@@ -39,7 +39,7 @@
                <children>
                   <ScrollPane focusTraversable="false" pannable="true" prefHeight="315.0" prefWidth="520.0">
                      <content>
-                        <TableView fx:id="employeeRecordsView" editable="true" focusTraversable="false" prefHeight="315.0" prefWidth="690.0">
+                        <TableView fx:id="employeeRecordsTable" editable="true" focusTraversable="false" prefHeight="315.0" prefWidth="690.0">
                            <columns>
                               <TableColumn fx:id="employeeIdCol" editable="false" prefWidth="104.5" resizable="false" text="Employee ID">
                                  <cellValueFactory>
@@ -58,12 +58,12 @@
                               </TableColumn>
                               <TableColumn fx:id="teamCol" editable="false" prefWidth="70.5" resizable="false" text="Team">
                                  <cellValueFactory>
-                                    <PropertyValueFactory property="teamName" />
+                                    <PropertyValueFactory property="team" />
                                  </cellValueFactory>
                               </TableColumn>
                               <TableColumn fx:id="departmentCol" editable="false" minWidth="0.0" prefWidth="105.5" resizable="false" text="Department">
                                  <cellValueFactory>
-                                    <PropertyValueFactory property="departmentName" />
+                                    <PropertyValueFactory property="department" />
                                  </cellValueFactory>
                               </TableColumn>
                               <TableColumn fx:id="ageCol" editable="false" minWidth="0.0" prefWidth="58.0" resizable="false" text="Age">

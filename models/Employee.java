@@ -8,8 +8,8 @@ public class Employee{
     private String gender;        // Gender of the employee
     private int age;              // Age of the employee
     private int employeeID;       // employee ID of the employee
-    private Team teamName;
-    private Department departmentName;
+    private Team team;
+    private Department department;
 
     /**
      * Constructs an Employee object with the specified name and salary.
@@ -19,15 +19,15 @@ public class Employee{
      * @param gender Gender to be given to the employee.
      * @param age Age to be given to the employee.
      */
-    public Employee(String firstName, String lastName, float salary, String gender, int age, int employeeID, Team teamName, Department departmentName) {
+    public Employee(String firstName, String lastName, float salary, String gender, int age, int employeeID, Team team, Department department) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.salary = salary;
         this.gender = gender;
         this.age = age;
         this.employeeID = employeeID;
-        this.teamName = teamName;
-        this.departmentName = departmentName;
+        this.team = team;
+        this.department = department;
     }
 
     /**
@@ -85,19 +85,19 @@ public class Employee{
     public void setSalary(float salary) {this.salary = salary; }
 
     /**
-     * Returns the employee's team name.
-     * @return the employee's team name.
+     * Returns the employee's team.
+     * @return the employee's team.
      */
-    public String getTeamName() {
-        return this.teamName.getName();
+    public Team getTeam() {
+        return this.team;
     }
 
     /**
-     * Returns the employee's department name.
-     * @return the employee's department name.
+     * Returns the employee's department.
+     * @return the employee's department.
      */
-    public String getDepartmentName() {
-        return this.departmentName.getName();
+    public Department getDepartment() {
+        return this.department;
     }
 
     /**

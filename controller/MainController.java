@@ -124,7 +124,7 @@ public class MainController {
 
     // === EMPLOYEE RECORDS UI ELEMENTS ================================================================
     @FXML
-    private TableView<Employee> employeeRecordsView;
+    private TableView<Employee> employeeRecordsTable;
     @FXML
     private TableColumn<Employee, Integer> employeeIdCol;
     @FXML
@@ -376,6 +376,9 @@ public class MainController {
                     // Selecting and re-selecting so that the comboBox updates, which in turn updates the displayed details
                     departmentsComboBox.getSelectionModel().clearSelection();
                     departmentsComboBox.getSelectionModel().select(choice);
+
+                    // Refreshing the employee data table to reflect any changes in this department's name
+                    this.employeeRecordsTable.refresh();
                 }
             });
 
@@ -678,7 +681,7 @@ public class MainController {
                         this.selectedDepartmentEmployeeCount.setText("Number of Employees: " + departmentsComboBox.getSelectionModel().getSelectedItem().getEmployeeCount());
                         this.selectedTeamEmployeeCount.setText("Number of Employees: " + choice.getEmployees().size());
                         this.employeeCountTxt.setText("Number of Employees: " + model.getEmployeeCount());
-                        this.employeeRecordsView.getItems().add(employee); // Adds the employee to the employee records view
+                        this.employeeRecordsTable.getItems().add(employee); // Adds the employee to the employee records view
                         dialog.close();
                     } catch (NumberFormatException ex) {
                         WarningPopup.createWarningPopup("Wrong Input Types", "Employee age or salary cannot be a String!", dialog);
