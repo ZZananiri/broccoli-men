@@ -299,14 +299,19 @@ public class MainController {
     @FXML
     private void selectNewDepartment(ActionEvent event) {
         // Getting the selected department and displaying its details
-        Department choice = departmentsComboBox.getSelectionModel().getSelectedItem();
-        if (choice != null) {
-            selectedDepartmentName.setText("Selected Department: " + choice.getName());
-            departmentDescriptionTxt.setText(choice.getDescription());
-            selectedDepartmentTeamCount.setText("Number of Teams: " + choice.getTeams().size());
-            selectedDepartmentEmployeeCount.setText("Number of Employees: " + choice.getEmployeeCount());
-            selectedDepartmentBudget.setText("Department Salary Budget: " + choice.getSalaryBudget());
-            selectedDepartmentExpenses.setText("Department Salary Expense: " + choice.getSalaryExpense());
+        Department selectedDepartment = departmentsComboBox.getSelectionModel().getSelectedItem();
+        if (selectedDepartment != null) {
+            // Displaying the selected department's details
+            selectedDepartmentName.setText("Selected Department: " + selectedDepartment.getName());
+            departmentDescriptionTxt.setText(selectedDepartment.getDescription());
+            selectedDepartmentTeamCount.setText("Number of Teams: " + selectedDepartment.getTeams().size());
+            selectedDepartmentEmployeeCount.setText("Number of Employees: " + selectedDepartment.getEmployeeCount());
+            selectedDepartmentBudget.setText("Department Salary Budget: " + selectedDepartment.getSalaryBudget());
+            selectedDepartmentExpenses.setText("Department Salary Expense: " + selectedDepartment.getSalaryExpense());
+
+            // The teams comboBox should only contain the selected department's teams
+            teamsComboBox.getItems().clear();
+            teamsComboBox.getItems().addAll(selectedDepartment.getTeams());
         } else {    // If selection is empty
             selectedDepartmentName.setText("Selected Department: ");
             departmentDescriptionTxt.setText("");
@@ -314,6 +319,9 @@ public class MainController {
             selectedDepartmentEmployeeCount.setText("Number of Employees: ");
             selectedDepartmentBudget.setText("Department Salary Budget: ");
             selectedDepartmentExpenses.setText("Department Salary Expense: ");
+
+            // The teams comboBox should contain no teams if no department is selected
+            teamsComboBox.getItems().clear();
         }
     }
     @FXML
@@ -557,12 +565,11 @@ public class MainController {
             selectedTeamBudget.setText("Team Salary Budget: " + choice.getSalaryBudget());
             selectedTeamExpenses.setText("Team Salary Expense: " + choice.getSalaryExpense());
         } else {    // If selection is empty
-            selectedDepartmentName.setText("Selected Team: ");
-            departmentDescriptionTxt.setText("");
-            selectedDepartmentTeamCount.setText("Number of Teams: ");
-            selectedDepartmentEmployeeCount.setText("Number of Employees: ");
-            selectedDepartmentBudget.setText("Team Salary Budget: ");
-            selectedDepartmentExpenses.setText("Team Salary Expense: ");
+            selectedTeamName.setText("Selected Team: ");
+            teamDescriptionTxt.setText("");
+            selectedTeamEmployeeCount.setText("Number of Employees: ");
+            selectedTeamBudget.setText("Team Salary Budget: ");
+            selectedTeamExpenses.setText("Team Salary Expense: ");
         }
     }
     @FXML
