@@ -565,6 +565,101 @@ public class MainController {
             selectedDepartmentExpenses.setText("Team Salary Expense: ");
         }
     }
+    @FXML
+    private void editTeamDetails(ActionEvent event) {
+        // Getting selected team and department
+        Team selectedTeam = teamsComboBox.getSelectionModel().getSelectedItem();
+        Department selectedDepartment = departmentsComboBox.getSelectionModel().getSelectedItem();
+
+        if (selectedTeam == null) { // Cannot edit a team if no team is selected
+            WarningPopup.createWarningPopup("No Team Selected", "Select a team from the dropdown first to edit.", this.view.getStage());
+        }
+        else {
+            // Creating a stage on which the user will be able to edit team details
+            final Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(view.getStage());
+            dialog.setTitle("Edit Team Details");
+            dialog.setResizable(false);
+
+            // Defining the elements on the stage
+            TextField teamNameField = new TextField();
+            TextArea teamDescriptionField = new TextArea();
+            Button setTeamNameBtn = new Button();
+            Button setTeamDescriptionBtn = new Button();
+            Text topNote = new Text(MAX_TEAM_NAME_LENGTH + " characters remaining.");
+            Text bottomNote = new Text(MAX_TEAM_DESCRIPTION_LENGTH + " characters remaining.");
+
+            // Configuring elements
+            teamNameField.setPromptText("New team name");
+            teamDescriptionField.setPromptText("New team description");
+            teamDescriptionField.setWrapText(true);
+            setTeamNameBtn.textProperty().set("Set new name");
+            setTeamDescriptionBtn.textProperty().set("Set new description");
+
+            // Defining event handlers for interactions with elements
+
+            // Updating the name character limit note as the user types
+            teamNameField.setOnKeyTyped(e -> {
+                int length = teamNameField.getLength();
+                topNote.setText(length > MAX_TEAM_NAME_LENGTH ?
+                        "Your input will be truncated" :
+                        MAX_TEAM_NAME_LENGTH - length + " characters remaining.");
+            });
+
+            // Updating the description character limit note as the user types
+            teamDescriptionField.setOnKeyTyped(e -> {
+                int length = teamDescriptionField.getLength();
+                bottomNote.setText(length > MAX_TEAM_DESCRIPTION_LENGTH ?
+                        "Your input will be truncated" :
+                        MAX_TEAM_DESCRIPTION_LENGTH - length + " characters remaining.");
+            });
+
+            // Updating the name of the team on set team name button click
+            setTeamNameBtn.setOnAction(e -> {
+                // Ensuring that the name is not too long
+                String name = teamNameField.getText().substring(0, Math.min(MAX_TEAM_NAME_LENGTH, teamNameField.getLength()));
+
+                // Checking that the name is not empty
+                // Also checking that an existing team in the same department does not have the same name.
+                if (name.length() == 0) {
+                    WarningPopup.createWarningPopup("No Name Provided", "Team name can not be empty!", dialog);
+                } else if (selectedDepartment.getTeams().stream().anyMatch(t -> name.equalsIgnoreCase(t.getName()))) {
+                    WarningPopup.createWarningPopup("Team Already Exists in Department", "A team with this name already exists in the same department!", dialog);
+                } else {
+                    selectedTeam.setName(name);
+                    // Selecting and re-selecting so that the comboBox updates, which in turn updates the displayed details
+                    teamsComboBox.getSelectionModel().clearSelection();
+                    teamsComboBox.getSelectionModel().select(selectedTeam);
+
+                    // Refreshing the employee data table to reflect any changes in this team's name
+                    this.employeeRecordsTable.refresh();
+                }
+            });
+
+            // Updating the description of the team on set team description button click
+            setTeamDescriptionBtn.setOnAction(e -> {
+                String description = teamDescriptionField.getText().substring(0, Math.min(MAX_TEAM_DESCRIPTION_LENGTH, teamDescriptionField.getLength()));
+                selectedTeam.setDescription(description);
+                teamDescriptionTxt.setText(selectedTeam.getDescription());
+            });
+
+            // Creating layout for the scene
+            HBox topHbox = new HBox(teamNameField, topNote, setTeamNameBtn);
+            topHbox.setSpacing(10);
+            HBox bottomHbox = new HBox(setTeamDescriptionBtn, bottomNote);
+            bottomHbox.setSpacing(10);
+            VBox dialogVbox = new VBox(topHbox, teamDescriptionField, bottomHbox);
+            dialogVbox.setPadding(new Insets(20, 20, 20, 20));
+            dialogVbox.setSpacing(10);
+
+            // Setting a scene on the stage and showing the stage
+            Scene dialogScene = new Scene(dialogVbox);
+            dialog.setScene(dialogScene);
+            dialog.show();
+        }
+
+    }
 
     // === EMPLOYEE SECTION EVENT HANDLERS ===============================================================
     @FXML
