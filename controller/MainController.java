@@ -121,6 +121,27 @@ public class MainController {
     private Text selectedEmployeeName;
     @FXML
     private Text selectedEmployeeSalary;
+
+    // === EMPLOYEE RECORDS UI ELEMENTS ================================================================
+    @FXML
+    private TableView<Employee> employeeRecordsTable;
+    @FXML
+    private TableColumn<Employee, Integer> employeeIdCol;
+    @FXML
+    private TableColumn<Employee, String> firstNameCol;
+    @FXML
+    private TableColumn<Employee, String> lastNameCol;
+    @FXML
+    private TableColumn<Employee, Team> teamCol;
+    @FXML
+    private TableColumn<Employee, Department> departmentCol;
+    @FXML
+    private TableColumn<Employee, Integer> ageCol;
+    @FXML
+    private TableColumn<Employee, Float> salaryCol;
+    @FXML
+    private TableColumn<Employee, String> genderCol;
+
     @FXML
     private void editCompanyDetails(ActionEvent event) {
         // Creating a stage on which the user will be able to edit company details
@@ -355,6 +376,9 @@ public class MainController {
                     // Selecting and re-selecting so that the comboBox updates, which in turn updates the displayed details
                     departmentsComboBox.getSelectionModel().clearSelection();
                     departmentsComboBox.getSelectionModel().select(choice);
+
+                    // Refreshing the employee data table to reflect any changes in this department's name
+                    this.employeeRecordsTable.refresh();
                 }
             });
 
@@ -649,7 +673,7 @@ public class MainController {
                         String salaryString = employeeSalaryField.getText().substring(0, Math.min(MAX_EMPLOYEE_SALARY_LENGTH, employeeSalaryField.getLength()));
                         float salary = (float) (Math.round(Float.parseFloat(salaryString) * 100.0) / 100.0);
                         String gender = employeeGenderGroup.getSelectedToggle().getUserData().toString();
-                        Employee employee = new Employee(firstName, lastName, salary, gender, age, EMPLOYEE_ID);
+                        Employee employee = new Employee(firstName, lastName, salary, gender, age, EMPLOYEE_ID, this.teamsComboBox.getSelectionModel().getSelectedItem(), this.departmentsComboBox.getSelectionModel().getSelectedItem());
                         EMPLOYEE_ID ++;
                         choice.addEmployee(employee);
                         this.model.incrementEmployeeCount(1);
@@ -657,6 +681,7 @@ public class MainController {
                         this.selectedDepartmentEmployeeCount.setText("Number of Employees: " + departmentsComboBox.getSelectionModel().getSelectedItem().getEmployeeCount());
                         this.selectedTeamEmployeeCount.setText("Number of Employees: " + choice.getEmployees().size());
                         this.employeeCountTxt.setText("Number of Employees: " + model.getEmployeeCount());
+                        this.employeeRecordsTable.getItems().add(employee); // Adds the employee to the employee records view
                         dialog.close();
                     } catch (NumberFormatException ex) {
                         WarningPopup.createWarningPopup("Wrong Input Types", "Employee age or salary cannot be a String!", dialog);
