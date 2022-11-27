@@ -445,6 +445,17 @@ public class MainController {
             deletionConfirmationBtn.setOnAction(e -> {
                 departmentsComboBox.getItems().remove(choice);
                 this.model.removeDepartment(choice);
+
+                // Adjusting the company's team count
+                this.model.incrementTeamCount(-choice.getTeams().size());
+                // Adjusting the company's employee count, and removing the employees from the employee table
+                for (Team team : choice.getTeams()) {
+                    this.model.incrementEmployeeCount(-team.getEmployees().size());
+                    for (Employee employee : team.getEmployees()) {
+                        employeeRecordsTable.getItems().remove(employee);
+                    }
+                }
+
                 // Updating the company details UI to reflect the changes resulting from the department deletion
                 updateCompanyDetailsUI();
                 dialog.close();
