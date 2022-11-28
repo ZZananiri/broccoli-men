@@ -7,10 +7,10 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
 
 <AnchorPane prefHeight="495.0" prefWidth="880.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -109,7 +109,7 @@
             <Button layoutX="237.0" layoutY="159.0" mnemonicParsing="false" onAction="#deleteDepartment" prefHeight="26.0" prefWidth="120.0" text="Delete Department" />
             <Button layoutX="237.0" layoutY="126.0" mnemonicParsing="false" onAction="#createNewTeam" prefHeight="26.0" prefWidth="120.0" text="Create New Team" />
             <Button layoutX="237.0" layoutY="13.0" mnemonicParsing="false" onAction="#editDepartmentDetails" prefHeight="26.0" prefWidth="120.0" text="Edit Department" />
-            <Button layoutX="237.0" layoutY="300.0" mnemonicParsing="false" onAction="#hireNewEmployee" prefHeight="26.0" prefWidth="120.0" text="Hire Employee" />
+            <Button layoutX="237.0" layoutY="319.0" mnemonicParsing="false" onAction="#hireNewEmployee" prefHeight="26.0" prefWidth="120.0" text="Hire Employee" />
             <ComboBox fx:id="departmentsComboBox" layoutX="110.0" layoutY="13.0" onAction="#selectNewDepartment" prefHeight="26.0" prefWidth="120.0" />
             <Text fx:id="selectedDepartmentName" layoutX="10.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Department:" />
 
@@ -124,6 +124,7 @@
             <Text fx:id="selectedTeamEmployeeCount" layoutX="10.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Employees:" />
             <ComboBox fx:id="teamsComboBox" layoutX="110.0" layoutY="202.0" onAction="#selectNewTeam" prefHeight="26.0" prefWidth="120.0" />
             <Text fx:id="selectedTeamName" layoutX="10.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Team:" />
+            <Button layoutX="237.0" layoutY="202.0" mnemonicParsing="false" onAction="#editTeamDetails" prefHeight="26.0" prefWidth="120.0" text="Edit Team" />
          </children>
       </AnchorPane>
 
