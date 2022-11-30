@@ -125,6 +125,7 @@
             <ComboBox fx:id="teamsComboBox" layoutX="110.0" layoutY="202.0" onAction="#selectNewTeam" prefHeight="26.0" prefWidth="120.0" />
             <Text fx:id="selectedTeamName" layoutX="10.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Team:" />
             <Button layoutX="237.0" layoutY="202.0" mnemonicParsing="false" onAction="#editTeamDetails" prefHeight="26.0" prefWidth="120.0" text="Edit Team" />
+            <Button layoutX="237.0" layoutY="285.0" mnemonicParsing="false" onAction="#deleteTeam" prefHeight="26.0" prefWidth="120.0" text="Delete Team" />
          </children>
       </AnchorPane>
 
