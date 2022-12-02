@@ -1,6 +1,9 @@
 package controller;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -17,6 +20,9 @@ import models.Team;
 import models.Employee;
 import views.MainView;
 import views.WarningPopup;
+
+import javax.swing.*;
+import java.util.EventListener;
 
 /**
  * Controller class responsible for handling events invoked by view elements, and updating the model and the view
@@ -116,13 +122,7 @@ public class MainController {
     @FXML
     private Text selectedTeamEmployeeCount;
 
-    // === COMPANY SECTION EVENT HANDLERS ================================================================
-    @FXML
-    private Text selectedEmployeeName;
-    @FXML
-    private Text selectedEmployeeSalary;
-
-    // === EMPLOYEE RECORDS UI ELEMENTS ================================================================
+    // === EMPLOYEE RECORDS TABLE UI ELEMENTS ================================================================
     @FXML
     private TableView<Employee> employeeRecordsTable;
     @FXML
@@ -142,6 +142,7 @@ public class MainController {
     @FXML
     private TableColumn<Employee, String> genderCol;
 
+    // === COMPANY SECTION EVENT HANDLERS ================================================================
     @FXML
     private void editCompanyDetails(ActionEvent event) {
         // Creating a stage on which the user will be able to edit company details
@@ -295,7 +296,6 @@ public class MainController {
     }
 
     // === DEPARTMENT SECTION EVENT HANDLERS ============================================================
-
     @FXML
     private void selectNewDepartment(ActionEvent event) {
         // Getting the selected department and displaying its details
@@ -467,7 +467,7 @@ public class MainController {
             dialogVbox.setSpacing(10);
 
             // Setting a scene on the stage and showing the stage
-            Scene dialogScene = new Scene(dialogVbox, 500, 100);
+            Scene dialogScene = new Scene(dialogVbox, 500, 120);
             dialog.setScene(dialogScene);
             dialog.show();
         } else {    // Cannot delete a department if no department is selected
@@ -678,16 +678,14 @@ public class MainController {
         }
 
     }
-
-    // === EMPLOYEE SECTION EVENT HANDLERS ===============================================================
     @FXML
     private void hireNewEmployee(ActionEvent event) {
-        // Creating a stage on which the user will be able to create a new team
         Team choice = teamsComboBox.getSelectionModel().getSelectedItem();
         // checking if the user has selected a department to add a team to or not
         if (choice == null) {
             WarningPopup.createWarningPopup("No Team selected", "Cannot add a employee without a specified team", this.view.getStage());
         } else {
+            // Creating a stage on which the user will be able to create a new team
             final Stage dialog = new Stage();
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initOwner(view.getStage());
@@ -769,10 +767,10 @@ public class MainController {
             employeeGenderNoResponseButton.setUserData("Prefer not to answer");
             employeeGenderNoResponseButton.setToggleGroup(employeeGenderGroup);
 
-            // Handling click on create team button
+            // Handling click on hire new employee button
             hireNewEmployeeBtn.setOnAction(e -> {
                 // Checking if inputs are not null
-                if (employeeFirstNameField.getLength() == 0 || employeeLastNameField.getLength() == 0 || employeeSalaryField.getLength() == 0 || employeeAgeField.getLength() == 0 || employeeGenderGroup.getSelectedToggle() == null) { // A team must have a name
+                if (employeeFirstNameField.getLength() == 0 || employeeLastNameField.getLength() == 0 || employeeSalaryField.getLength() == 0 || employeeAgeField.getLength() == 0 || employeeGenderGroup.getSelectedToggle() == null) {
                     WarningPopup.createWarningPopup("Complete Details Not Provided", "Employee details can not be empty!", dialog);
                 }
                 else {
@@ -829,4 +827,220 @@ public class MainController {
         }
     }
 
+    // === EMPLOYEE SECTION EVENT HANDLERS ===============================================================
+    @FXML
+    private void editEmployeeDetails(ActionEvent event) {
+        Employee selected_employee = employeeRecordsTable.getSelectionModel().getSelectedItem();
+        // Checking if the user has selected an employee or not
+        if (selected_employee == null) {
+            WarningPopup.createWarningPopup("No Employee Selected", "An employee must first be selected from the employee records table.", this.view.getStage());
+        } else {
+            // Creating a stage on which the user will be able to edit the selected employee's details
+            final Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(view.getStage());
+            dialog.setTitle("Edit Employee Details");
+            dialog.setResizable(false);
+
+            // Defining the elements on the stage
+            TextField employeeFirstNameField = new TextField(selected_employee.getFirstName());
+            TextField employeeLastNameField = new TextField(selected_employee.getLastName());
+            TextField employeeSalaryField = new TextField(String.valueOf(selected_employee.getSalary()));
+            ToggleGroup employeeGenderGroup = new ToggleGroup();
+            TextField employeeAgeField = new TextField(String.valueOf(selected_employee.getAge()));
+            Button changeEmployeeDetailsBtn = new Button("Change Details");
+            Text firstNameNote = new Text(MAX_EMPLOYEE_FIRST_NAME_LENGTH + " characters remaining.");
+            Text lastNameNote = new Text(MAX_EMPLOYEE_LAST_NAME_LENGTH + " characters remaining.");
+            Text salaryNote = new Text(MAX_EMPLOYEE_SALARY_LENGTH + " characters remaining.");
+            Text ageNote = new Text(MAX_EMPLOYEE_AGE_LENGTH + " characters remaining.");
+
+            // Configuring the elements
+            employeeFirstNameField.setPromptText("Employee first name");
+            employeeLastNameField.setPromptText("Employee last name");
+            employeeSalaryField.setPromptText("Employee salary");
+            employeeAgeField.setPromptText("Employee age");
+
+            // Setting up gender radio buttons
+            RadioButton employeeGenderMaleButton = new RadioButton("Male");
+            employeeGenderMaleButton.setUserData("Male");
+            employeeGenderMaleButton.setToggleGroup(employeeGenderGroup);
+
+            RadioButton employeeGenderFemaleButton = new RadioButton("Female");
+            employeeGenderFemaleButton.setUserData("Female");
+            employeeGenderFemaleButton.setToggleGroup(employeeGenderGroup);
+
+            RadioButton employeeGenderTransButton = new RadioButton("Transgender");
+            employeeGenderTransButton.setUserData("Transgender");
+            employeeGenderTransButton.setToggleGroup(employeeGenderGroup);
+
+            RadioButton employeeGenderNonBinaryButton = new RadioButton("Non-Binary");
+            employeeGenderNonBinaryButton.setUserData("Non-Binary");
+            employeeGenderNonBinaryButton.setToggleGroup(employeeGenderGroup);
+
+            RadioButton employeeGenderNoResponseButton = new RadioButton("Prefer not to answer");
+            employeeGenderNoResponseButton.setUserData("Prefer not to answer");
+            employeeGenderNoResponseButton.setToggleGroup(employeeGenderGroup);
+
+            // Selecting the selected employee's specified gender
+            switch (selected_employee.getGender()) {
+                case "Male" -> employeeGenderMaleButton.selectedProperty().set(true);
+                case "Female" -> employeeGenderFemaleButton.selectedProperty().set(true);
+                case "Transgender" -> employeeGenderTransButton.selectedProperty().set(true);
+                case "Non-Binary" -> employeeGenderNonBinaryButton.selectedProperty().set(true);
+                case "Prefer not to answer" -> employeeGenderNoResponseButton.selectedProperty().set(true);
+            }
+
+            // Defining event handlers for interactions with elements
+
+            // Updating the first name character limit note as the user types
+            employeeFirstNameField.setOnKeyTyped(e -> {
+                int length = employeeFirstNameField.getLength();
+                firstNameNote.setText(length > MAX_EMPLOYEE_FIRST_NAME_LENGTH ?
+                        "Your input will be truncated" :
+                        MAX_EMPLOYEE_FIRST_NAME_LENGTH - length + " characters remaining.");
+            });
+
+            // Updating the last name character limit note as the user types
+            employeeLastNameField.setOnKeyTyped(e -> {
+                int length = employeeLastNameField.getLength();
+                lastNameNote.setText(length > MAX_EMPLOYEE_LAST_NAME_LENGTH ?
+                        "Your input will be truncated" :
+                        MAX_EMPLOYEE_LAST_NAME_LENGTH - length + " characters remaining.");
+            });
+
+            // Updating the salary character limit note as the user types
+            employeeSalaryField.setOnKeyTyped(e -> {
+                int length = employeeSalaryField.getLength();
+                salaryNote.setText(length > MAX_EMPLOYEE_SALARY_LENGTH ?
+                        "Your input will be truncated" :
+                        MAX_EMPLOYEE_SALARY_LENGTH - length + " characters remaining.");
+            });
+
+            // Updating the age character limit note as the user types
+            employeeAgeField.setOnKeyTyped(e -> {
+                int length = employeeAgeField.getLength();
+                ageNote.setText(length > MAX_EMPLOYEE_AGE_LENGTH ?
+                        "Your input will be truncated" :
+                        MAX_EMPLOYEE_AGE_LENGTH - length + " characters remaining.");
+            });
+
+            // Handling click on change employee details button
+            changeEmployeeDetailsBtn.setOnAction(e -> {
+                // Checking if inputs are not null
+                if (employeeFirstNameField.getLength() == 0 || employeeLastNameField.getLength() == 0 || employeeSalaryField.getLength() == 0 || employeeAgeField.getLength() == 0 || employeeGenderGroup.getSelectedToggle() == null){
+                    WarningPopup.createWarningPopup("Complete Details Not Provided", "Employee details can not be empty!", dialog);
+                } else {
+                    // Ensuring that the employee details not too long, and creating new employee
+
+                    // Checking for appropriate input types
+                    try{
+                        String firstName = employeeFirstNameField.getText().substring(0, Math.min(MAX_EMPLOYEE_FIRST_NAME_LENGTH, employeeFirstNameField.getLength()));
+                        String lastName = employeeLastNameField.getText().substring(0, Math.min(MAX_EMPLOYEE_LAST_NAME_LENGTH, employeeLastNameField.getLength()));
+                        int age = Integer.parseInt(employeeAgeField.getText().substring(0, Math.min(MAX_EMPLOYEE_AGE_LENGTH, employeeAgeField.getLength())));
+                        String salaryString = employeeSalaryField.getText().substring(0, Math.min(MAX_EMPLOYEE_SALARY_LENGTH, employeeSalaryField.getLength()));
+                        float salary = (float) (Math.round(Float.parseFloat(salaryString) * 100.0) / 100.0);
+                        String gender = employeeGenderGroup.getSelectedToggle().getUserData().toString();
+                        selected_employee.setFirstName(firstName);
+                        selected_employee.setLastName(lastName);
+                        selected_employee.setAge(age);
+                        selected_employee.setSalary(salary);
+                        selected_employee.setGender(gender);
+
+                        employeeRecordsTable.refresh(); // Refreshing the table to display new details
+                        dialog.close();
+                    } catch (NumberFormatException ex) {
+                        WarningPopup.createWarningPopup("Wrong Input Types", "Employee age and salary cannot be a String!", dialog);
+                    }
+                }
+            });
+
+            // Creating layout for the scene
+            HBox firstNameHbox = new HBox(new Text("First Name:"), employeeFirstNameField, firstNameNote);
+            firstNameHbox.setSpacing(10);
+            HBox lastNameHbox = new HBox(new Text("Last Name:"), employeeLastNameField, lastNameNote);
+            lastNameHbox.setSpacing(10);
+            HBox salaryHbox = new HBox(new Text("Salary:"), employeeSalaryField, salaryNote);
+            salaryHbox.setSpacing(10);
+            HBox genderbox = new HBox(new Text("Gender:"));
+            HBox genderHbox = new HBox(employeeGenderMaleButton, employeeGenderFemaleButton, employeeGenderTransButton, employeeGenderNonBinaryButton, employeeGenderNoResponseButton);
+            genderHbox.setSpacing(10);
+            HBox ageHbox = new HBox(new Text("Age:"), employeeAgeField, ageNote);
+            ageHbox.setSpacing(10);
+            HBox bottomHbox = new HBox(changeEmployeeDetailsBtn);
+            bottomHbox.setSpacing(10);
+            VBox dialogVbox = new VBox(firstNameHbox, lastNameHbox, salaryHbox, genderbox, genderHbox, ageHbox, bottomHbox);
+            dialogVbox.setPadding(new Insets(20, 20, 20, 20));
+            dialogVbox.setSpacing(10);
+
+            // Setting the scene on the stage and showing the stage
+            Scene dialogScene = new Scene(dialogVbox);
+            dialog.setScene(dialogScene);
+            dialog.show();
+        }
+    }
+    @FXML
+    private void changeEmployeeTeam(ActionEvent event) {
+        Employee selected_employee = employeeRecordsTable.getSelectionModel().getSelectedItem();
+        Team selected_team = teamsComboBox.getSelectionModel().getSelectedItem();
+        // Checking if the user has selected an employee and team or not
+        if (selected_employee == null) {
+            WarningPopup.createWarningPopup("No Employee Selected", "An employee must first be selected from the employee records table.", this.view.getStage());
+        } else if (selected_team == null) {
+            WarningPopup.createWarningPopup("No Team Selected", "A team must first be selected in the teams dashboard.", this.view.getStage());
+        } else {
+            // Creating a stage on which the user will be able to confirm the team change
+            final Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(view.getStage());
+            dialog.setTitle("Team Change Confirmation");
+            dialog.setResizable(false);
+
+            // Defining the elements on the stage
+            TextFlow confirmationText = new TextFlow();
+            Text text1 = new Text("Are you sure you would like to change the employee's team to " );
+            Text departmentName = new Text(selected_team.getName());
+            Text text2 = new Text("?");
+            Button confirmationBtn = new Button("Change Team");
+
+            // Configuring elements
+            departmentName.setStyle("-fx-font-weight: bold");
+            confirmationText.getChildren().addAll(text1, departmentName, text2);
+
+            // Defining event handler for click on confirmation button
+            confirmationBtn.setOnAction(e -> {
+                // Removing employee from current team
+                Team current_team = selected_employee.getTeam();
+                current_team.getEmployees().remove(selected_employee);
+                selected_employee.getDepartment().incrementEmployeeCount(-1);
+
+                // Adding employee to new team
+                Department selected_department = departmentsComboBox.getSelectionModel().getSelectedItem();
+                selected_team.addEmployee(selected_employee);
+                selected_employee.setTeam(selected_team);
+                selected_employee.setDepartment(selected_department);
+                selected_department.incrementEmployeeCount(1);
+
+                // Updating employee counts
+                this.selectedDepartmentEmployeeCount.setText("Number of Employees: " + selected_department.getEmployeeCount());
+                this.selectedTeamEmployeeCount.setText("Number of Employees: " + selected_team.getEmployees().size());
+
+                employeeRecordsTable.refresh(); // Updating table with changes
+                dialog.close();
+            });
+
+            // Creating layout for the scene
+            VBox dialogVbox = new VBox(confirmationText, confirmationBtn);
+            dialogVbox.setPadding(new Insets(20, 20, 20, 20));
+            dialogVbox.setSpacing(10);
+
+            // Setting a scene on the stage and showing the stage
+            Scene dialogScene = new Scene(dialogVbox, 500, 100);
+            dialog.setScene(dialogScene);
+            dialog.show();
+        }
+    }
+    @FXML
+    private void fireSelectedEmployee(ActionEvent event) {
+
+    }
 }
