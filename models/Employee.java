@@ -35,7 +35,7 @@ public class Employee{
      * @return the employee's full name.
      */
     public String getFullName() {
-        return this.firstName + this.lastName;
+        return this.firstName + " " + this.lastName;
     }
 
     /**
