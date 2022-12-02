@@ -1074,9 +1074,18 @@ public class MainController {
                 employeeRecordsTable.getItems().remove(selected_employee);
 
                 // Updating employee counts
-                this.selectedDepartmentEmployeeCount.setText("Number of Employees: " + selected_employee.getDepartment().getEmployeeCount());
-                this.selectedTeamEmployeeCount.setText("Number of Employees: " + selected_employee.getTeam().getEmployees().size());
+                this.employeeCountTxt.setText("Number of Employees: " + this.model.getEmployeeCount());
+                Department selected_department = departmentsComboBox.getSelectionModel().getSelectedItem();
+                if (selected_department == selected_employee.getDepartment()) {
+                    this.selectedDepartmentEmployeeCount.setText("Number of Employees: " + selected_department.getEmployeeCount());
+                }
+                Team selected_team = teamsComboBox.getSelectionModel().getSelectedItem();
+                if (selected_team == selected_employee.getTeam()) {
+                    this.selectedTeamEmployeeCount.setText("Number of Employees: " + selected_team.getEmployees().size());
+                }
 
+                // Updating the company details UI and employee table to reflect the changes
+                updateCompanyDetailsUI();
                 employeeRecordsTable.refresh();
                 dialog.close();
             });
