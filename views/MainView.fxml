@@ -125,6 +125,19 @@
             <ComboBox fx:id="teamsComboBox" layoutX="110.0" layoutY="202.0" onAction="#selectNewTeam" prefHeight="26.0" prefWidth="120.0" />
             <Text fx:id="selectedTeamName" layoutX="10.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Team:" />
             <Button layoutX="237.0" layoutY="202.0" mnemonicParsing="false" onAction="#editTeamDetails" prefHeight="26.0" prefWidth="120.0" text="Edit Team" />
+            <Text layoutX="11.0" layoutY="380.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Options for Selected Employee Record:" wrappingWidth="300.0">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Text>
+            <Button layoutX="10.0" layoutY="390.0" mnemonicParsing="false" onAction="#editEmployeeDetails" prefHeight="26.0" prefWidth="107.0" text="Edit Details" />
+            <Button layoutX="130.0" layoutY="390.0" mnemonicParsing="false" onAction="#changeEmployeeTeam" prefHeight="26.0" prefWidth="107.0" text="Change Team" />
+            <Button layoutX="250.0" layoutY="390.0" mnemonicParsing="false" onAction="#fireSelectedEmployee" prefHeight="26.0" prefWidth="107.0" text="Fire Employee" />
+            <Text layoutX="11.0" layoutY="440.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Employee Records Filtering Options:" wrappingWidth="300.0">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Text>
          </children>
       </AnchorPane>
 

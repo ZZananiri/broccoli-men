@@ -47,11 +47,27 @@ public class Employee{
     }
 
     /**
+     * Sets the employee's first name to the specified string.
+     * @param firstName the new first name of the employee
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    /**
      * Returns the employee's last name.
      * @return the employee's last name.
      */
     public String getLastName() {
         return this.lastName;
+    }
+
+    /**
+     * Sets the employee's last name to the specified string.
+     * @param lastName the new last name of the employee
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     /**
@@ -79,6 +95,14 @@ public class Employee{
     }
 
     /**
+     * Sets the employee's gender to the specified string.
+     * @param gender the new gender of the employee
+     */
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    /**
      * Sets the employee's salary to the specified float.
      * @param salary the new salary of the employee.
      */
@@ -93,6 +117,14 @@ public class Employee{
     }
 
     /**
+     * Sets the employee's team to the specified team
+     * @param team the new team of the employee
+     */
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    /**
      * Returns the employee's department.
      * @return the employee's department.
      */
@@ -101,10 +133,26 @@ public class Employee{
     }
 
     /**
+     * Sets the employee's department to the specified department
+     * @param department the new department of the employee
+     */
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    /**
      * Returns the employee's age.
      * @return the employee's age.
      */
     public int getAge() {
         return this.age;
+    }
+
+    /**
+     * Sets the employee's age to the specified number.
+     * @param age the new age of the employee
+     */
+    public void setAge(int age) {
+        this.age = age;
     }
 }
