@@ -681,11 +681,11 @@ public class MainController {
     @FXML
     private void hireNewEmployee(ActionEvent event) {
         Team choice = teamsComboBox.getSelectionModel().getSelectedItem();
-        // checking if the user has selected a department to add a team to or not
+        // checking if the user has selected a team to add an employee to or not
         if (choice == null) {
             WarningPopup.createWarningPopup("No Team selected", "Cannot add a employee without a specified team", this.view.getStage());
         } else {
-            // Creating a stage on which the user will be able to create a new team
+            // Creating a stage on which the user will be able to hire a new employee
             final Stage dialog = new Stage();
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initOwner(view.getStage());
@@ -1041,6 +1041,55 @@ public class MainController {
     }
     @FXML
     private void fireSelectedEmployee(ActionEvent event) {
+        Employee selected_employee = employeeRecordsTable.getSelectionModel().getSelectedItem();
+        // checking if the user has selected an employee to fire or not
+        if (selected_employee == null) {
+            WarningPopup.createWarningPopup("No Employee selected", "An employee must first be selected from the employee records table.", this.view.getStage());
+        } else {
+            // Creating a stage on which the user will be able to fire employee
+            final Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(view.getStage());
+            dialog.setTitle("Fire Employee");
+            dialog.setResizable(false);
 
+            // Defining the elements on the stage
+            TextFlow confirmationText = new TextFlow();
+            Text text1 = new Text("Are you sure you would like to fire the " );
+            Text employeeName = new Text(selected_employee.getFullName());
+            Text text2 = new Text(" employee? This is an irreversible action.");
+            Button firingConfirmationBtn = new Button();
+
+            // Configuring the elements
+            employeeName.setStyle("-fx-font-weight: bold");
+            confirmationText.getChildren().addAll(text1, employeeName, text2);
+            firingConfirmationBtn.textProperty().set("Fire Employee");
+
+            // Defining event handlers for click on firing confirmation
+            firingConfirmationBtn.setOnAction(e -> {
+                // Removing employee from team, department and employee table
+                selected_employee.getTeam().getEmployees().remove(selected_employee);
+                selected_employee.getDepartment().incrementEmployeeCount(-1);
+                this.model.incrementEmployeeCount(-1);
+                employeeRecordsTable.getItems().remove(selected_employee);
+
+                // Updating employee counts
+                this.selectedDepartmentEmployeeCount.setText("Number of Employees: " + selected_employee.getDepartment().getEmployeeCount());
+                this.selectedTeamEmployeeCount.setText("Number of Employees: " + selected_employee.getTeam().getEmployees().size());
+
+                employeeRecordsTable.refresh();
+                dialog.close();
+            });
+
+            // Creating layout for the scene
+            VBox dialogVbox = new VBox(confirmationText, firingConfirmationBtn);
+            dialogVbox.setPadding(new Insets(20, 20, 20, 20));
+            dialogVbox.setSpacing(10);
+
+            // Setting the scene on the stage and showing the stage
+            Scene dialogScene = new Scene(dialogVbox, 500, 120);
+            dialog.setScene(dialogScene);
+            dialog.show();
+        }
     }
 }
