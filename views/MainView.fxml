@@ -125,6 +125,8 @@
             <ComboBox fx:id="teamsComboBox" layoutX="110.0" layoutY="202.0" onAction="#selectNewTeam" prefHeight="26.0" prefWidth="120.0" />
             <Text fx:id="selectedTeamName" layoutX="10.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Team:" />
             <Button layoutX="237.0" layoutY="202.0" mnemonicParsing="false" onAction="#editTeamDetails" prefHeight="26.0" prefWidth="120.0" text="Edit Team" />
+            <Button layoutX="237.0" layoutY="285.0" mnemonicParsing="false" onAction="#deleteTeam" prefHeight="26.0" prefWidth="120.0" text="Delete Team" />
+           
             <Text layoutX="11.0" layoutY="380.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Options for Selected Employee Record:" wrappingWidth="300.0">
                <font>
                   <Font name="System Bold" size="15.0" />

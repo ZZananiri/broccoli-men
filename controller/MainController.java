@@ -679,6 +679,72 @@ public class MainController {
 
     }
     @FXML
+    private void deleteTeam(ActionEvent event) {
+        // A department must be selected to select a team to delete
+        Department selectedDepartment = departmentsComboBox.getSelectionModel().getSelectedItem();
+        if (selectedDepartment != null) {
+            Team choice = teamsComboBox.getSelectionModel().getSelectedItem();
+            if (choice != null) {   // A team must be selected for deletion
+                // Creating a stage on which the user will be able to confirm deletion
+                final Stage dialog = new Stage();
+                dialog.initModality(Modality.APPLICATION_MODAL);
+                dialog.initOwner(view.getStage());
+                dialog.setTitle("Deletion Confirmation");
+                dialog.setResizable(false);
+
+                // Defining the elements on the stage
+                TextFlow confirmationText = new TextFlow();
+                Text text1 = new Text("Are you sure you would like to delete the ");
+                Text teamName = new Text(choice.getName());
+                Text text2 = new Text(" team? All employees belonging to this team " +
+                        "will be fired. This is an irreversible action.");
+                Button deletionConfirmationBtn = new Button();
+
+                // Configuring elements
+                teamName.setStyle("-fx-font-weight: bold");
+                confirmationText.getChildren().addAll(text1, teamName, text2);
+                deletionConfirmationBtn.textProperty().set("Delete Team");
+
+                // Defining event handler for click on delete confirmation
+                deletionConfirmationBtn.setOnAction(e -> {
+                    teamsComboBox.getItems().remove(choice);
+                    selectedDepartment.removeTeam(choice);
+
+                    // Adjusting the company's team count
+                    this.model.incrementTeamCount(-1);
+                    // Adjusting the department's team count
+                    this.selectedDepartmentTeamCount.setText("Number of Teams: " + selectedDepartment.getTeams().size());
+                    selectedDepartment.incrementEmployeeCount(-choice.getEmployees().size());
+                    this.selectedDepartmentEmployeeCount.setText("Number of Employees: " + selectedDepartment.getEmployeeCount());
+                    // Adjusting the company's employee count, and removing the employees from the employee table
+                    this.model.incrementEmployeeCount(-choice.getEmployees().size());
+                    for (Employee employee : choice.getEmployees()) {
+                        employeeRecordsTable.getItems().remove(employee);
+                    }
+                    // Updating the company details UI to reflect the changes resulting from the department deletion
+                    updateCompanyDetailsUI();
+                    dialog.close();
+                });
+
+                // Creating layout for the scene
+                VBox dialogVbox = new VBox(confirmationText, deletionConfirmationBtn);
+                dialogVbox.setPadding(new Insets(20, 20, 20, 20));
+                dialogVbox.setSpacing(10);
+
+                // Setting a scene on the stage and showing the stage
+                Scene dialogScene = new Scene(dialogVbox, 500, 100);
+                dialog.setScene(dialogScene);
+                dialog.show();
+            } else {    // Cannot delete a team if no team is selected
+                WarningPopup.createWarningPopup("No Team Selected", "Select a team from the " +
+                        "dropdown first to delete.", this.view.getStage());
+            }
+        }else {// Cannot delete a team from a department if no department is selected
+            WarningPopup.createWarningPopup("No Department Selected", "Select a department from the " +
+                    "dropdown first to choose a team to delete.", this.view.getStage());
+        }
+    }
+    @FXML
     private void hireNewEmployee(ActionEvent event) {
         Team choice = teamsComboBox.getSelectionModel().getSelectedItem();
         // checking if the user has selected a team to add an employee to or not
