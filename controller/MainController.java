@@ -714,13 +714,13 @@ public class MainController {
                     this.model.incrementTeamCount(-1);
                     // Adjusting the department's team count
                     this.selectedDepartmentTeamCount.setText("Number of Teams: " + selectedDepartment.getTeams().size());
-
+                    selectedDepartment.incrementEmployeeCount(-choice.getEmployees().size());
+                    this.selectedDepartmentEmployeeCount.setText("Number of Employees: " + selectedDepartment.getEmployeeCount());
                     // Adjusting the company's employee count, and removing the employees from the employee table
                     this.model.incrementEmployeeCount(-choice.getEmployees().size());
                     for (Employee employee : choice.getEmployees()) {
                         employeeRecordsTable.getItems().remove(employee);
                     }
-
                     // Updating the company details UI to reflect the changes resulting from the department deletion
                     updateCompanyDetailsUI();
                     dialog.close();
@@ -739,7 +739,7 @@ public class MainController {
                 WarningPopup.createWarningPopup("No Team Selected", "Select a team from the " +
                         "dropdown first to delete.", this.view.getStage());
             }
-        }else {// Cannot delete a department if no department is selected
+        }else {// Cannot delete a team from a department if no department is selected
             WarningPopup.createWarningPopup("No Department Selected", "Select a department from the " +
                     "dropdown first to choose a team to delete.", this.view.getStage());
         }
