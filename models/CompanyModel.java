@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * A complete class representation of the state of a company.
  */
-public class CompanyModel {
+public class CompanyModel implements IExpensable{
     private String name;    // Name of the company
     private String description; // A description of the company
     private final ArrayList<Department> departments;  // All the departments in the company
@@ -105,7 +105,17 @@ public class CompanyModel {
      * Returns the company's salary expense.
      * @return the company's salary expense.
      */
+    @Override
     public double getSalaryExpense() {
+        this.salaryExpense = 0;
+        for (Department department : getDepartments()){
+            for (Team team : department.getTeams()){
+                for (Employee employee : team.getEmployees())
+                {
+                    this.salaryExpense+= employee.getSalaryExpense();
+                }
+            }
+        }
         return this.salaryExpense;
     }
 }
