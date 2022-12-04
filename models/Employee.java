@@ -70,14 +70,6 @@ public class Employee implements IExpensable{
     }
 
     /**
-     * Returns the employee's salary.
-     * @return the employee's salary.
-     */
-    public double getSalary() {
-        return this.salary;
-    }
-
-    /**
      * Returns the employee's ID.
      * @return the employee's ID.
      */

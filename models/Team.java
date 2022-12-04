@@ -7,7 +7,6 @@ public class Team implements IExpensable{
     private String name;    // Name of the team
     private String description; // A description of the team
     private double salaryBudget; // Budget of salary of the team
-    private double salaryExpense; // The salary expense of the
 
 
     /**
@@ -20,7 +19,6 @@ public class Team implements IExpensable{
         this.description = description;
         this.employees = new ArrayList<Employee>();
         this.salaryBudget = 0.0;
-        this.salaryExpense = 0.0;
     }
 
     /**
@@ -71,12 +69,12 @@ public class Team implements IExpensable{
      */
     @Override
     public double getSalaryExpense() {
-        this.salaryExpense = 0;
+        double salaryExpense = 0.0;
         for (Employee employee : getEmployees())
         {
-            this.salaryExpense+= employee.getSalaryExpense();
+            salaryExpense+= employee.getSalaryExpense();
         }
-        return this.salaryExpense;
+        return salaryExpense;
     }
 
     /**

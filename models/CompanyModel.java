@@ -107,15 +107,10 @@ public class CompanyModel implements IExpensable{
      */
     @Override
     public double getSalaryExpense() {
-        this.salaryExpense = 0;
+        double salaryExpense = 0.0;
         for (Department department : getDepartments()){
-            for (Team team : department.getTeams()){
-                for (Employee employee : team.getEmployees())
-                {
-                    this.salaryExpense+= employee.getSalaryExpense();
-                }
-            }
+            salaryExpense+= department.getSalaryExpense();
         }
-        return this.salaryExpense;
+        return salaryExpense;
     }
 }

@@ -270,7 +270,7 @@ public class MainController {
                     this.model.addDepartment(department);
                     departmentsComboBox.getItems().add(department);
                     this.departmentCountTxt.setText("Number of Departments: " + this.model.getDepartments().size());
-                    // Adjusting total company budget
+                    // Adjusting total company salary expense
                     this.companySalaryExpenseTxt.setText("Total Salary Expense: " + model.getSalaryExpense());
                     dialog.close();
                 }
@@ -457,7 +457,7 @@ public class MainController {
                         employeeRecordsTable.getItems().remove(employee);
                     }
                 }
-                // Adjusting total company budget
+                // Adjusting total company salary expense
                 this.companySalaryExpenseTxt.setText("Total Salary Expense: " + model.getSalaryExpense());
 
                 // Updating the company details UI to reflect the changes resulting from the department deletion
@@ -547,7 +547,7 @@ public class MainController {
                         this.model.incrementTeamCount(1);
                         this.teamCountTxt.setText("Number of Teams: " + model.getTeamCount());
                         this.selectedDepartmentTeamCount.setText("Number of Teams: " + choice.getTeams().size());
-                        // Adjusting total company and specific department budget
+                        // Adjusting total company and specific department salary expense
                         this.companySalaryExpenseTxt.setText("Total Salary Expense: " + model.getSalaryExpense());
                         this.selectedDepartmentExpenses.setText("Department Salary Expense: " + choice.getSalaryExpense());
                         dialog.close();
@@ -728,7 +728,7 @@ public class MainController {
                     for (Employee employee : choice.getEmployees()) {
                         employeeRecordsTable.getItems().remove(employee);
                     }
-                    // Adjusting total company and specific department budget
+                    // Adjusting total company and specific department salary expense
                     this.companySalaryExpenseTxt.setText("Total Salary Expense: " + model.getSalaryExpense());
                     this.selectedDepartmentExpenses.setText("Department Salary Expense: " + selectedDepartment.getSalaryExpense());
                     // Updating the company details UI to reflect the changes resulting from the department deletion
@@ -869,7 +869,7 @@ public class MainController {
                         this.selectedTeamEmployeeCount.setText("Number of Employees: " + choice.getEmployees().size());
                         this.employeeCountTxt.setText("Number of Employees: " + model.getEmployeeCount());
                         this.employeeRecordsTable.getItems().add(employee); // Adds the employee to the employee records view
-                        // Adjusting total company, specific department and team budget
+                        // Adjusting total company, specific department and team salary expense
                         this.companySalaryExpenseTxt.setText("Total Salary Expense: " + model.getSalaryExpense());
                         this.selectedDepartmentExpenses.setText("Department Salary Expense: " + this.departmentsComboBox.getSelectionModel().getSelectedItem().getSalaryExpense());
                         this.selectedTeamExpenses.setText("Team Salary Expense: " + this.teamsComboBox.getSelectionModel().getSelectedItem().getSalaryExpense());
@@ -925,7 +925,7 @@ public class MainController {
             // Defining the elements on the stage
             TextField employeeFirstNameField = new TextField(selected_employee.getFirstName());
             TextField employeeLastNameField = new TextField(selected_employee.getLastName());
-            TextField employeeSalaryField = new TextField(String.valueOf(selected_employee.getSalary()));
+            TextField employeeSalaryField = new TextField(String.valueOf(selected_employee.getSalaryExpense()));
             ToggleGroup employeeGenderGroup = new ToggleGroup();
             TextField employeeAgeField = new TextField(String.valueOf(selected_employee.getAge()));
             Button changeEmployeeDetailsBtn = new Button("Change Details");
@@ -1026,17 +1026,17 @@ public class MainController {
                         selected_employee.setSalary(salary);
                         selected_employee.setGender(gender);
 
-                        // Adjusting total company budget
+                        // Adjusting total company salary expense
                         this.companySalaryExpenseTxt.setText("Total Salary Expense: " + model.getSalaryExpense());
                         Department selected_department = departmentsComboBox.getSelectionModel().getSelectedItem();
                         if (selected_department == selected_employee.getDepartment()) {
-                            // Adjusting department budget
-                            this.selectedDepartmentExpenses.setText("Department Salary Expense: " + this.departmentsComboBox.getSelectionModel().getSelectedItem().getSalaryExpense());
+                            // Adjusting department salary expense
+                            this.selectedDepartmentExpenses.setText("Department Salary Expense: " + selected_department.getSalaryExpense());
                         }
                         Team selected_team = teamsComboBox.getSelectionModel().getSelectedItem();
                         if (selected_team == selected_employee.getTeam()) {
-                            // Adjusting team budget
-                            this.selectedTeamExpenses.setText("Team Salary Expense: " + this.teamsComboBox.getSelectionModel().getSelectedItem().getSalaryExpense());
+                            // Adjusting team salary expense
+                            this.selectedTeamExpenses.setText("Team Salary Expense: " + selected_team.getSalaryExpense());
                         }
                         employeeRecordsTable.refresh(); // Refreshing the table to display new details
                         dialog.close();
@@ -1115,10 +1115,10 @@ public class MainController {
                 // Updating employee counts
                 this.selectedDepartmentEmployeeCount.setText("Number of Employees: " + selected_department.getEmployeeCount());
                 this.selectedTeamEmployeeCount.setText("Number of Employees: " + selected_team.getEmployees().size());
-                // Adjusting department budget
-                this.selectedDepartmentExpenses.setText("Department Salary Expense: " + this.departmentsComboBox.getSelectionModel().getSelectedItem().getSalaryExpense());
-                // Adjusting team budget
-                this.selectedTeamExpenses.setText("Team Salary Expense: " + this.teamsComboBox.getSelectionModel().getSelectedItem().getSalaryExpense());
+                // Adjusting department salary expense
+                this.selectedDepartmentExpenses.setText("Department Salary Expense: " + selected_department.getSalaryExpense());
+                // Adjusting team salary expense
+                this.selectedTeamExpenses.setText("Team Salary Expense: " + selected_team.getSalaryExpense());
                 employeeRecordsTable.refresh(); // Updating table with changes
                 dialog.close();
             });
@@ -1168,21 +1168,21 @@ public class MainController {
                 this.model.incrementEmployeeCount(-1);
                 employeeRecordsTable.getItems().remove(selected_employee);
 
-                // Adjusting total company budget
+                // Adjusting total company salary expense
                 this.companySalaryExpenseTxt.setText("Total Salary Expense: " + model.getSalaryExpense());
                 // Updating employee counts
                 this.employeeCountTxt.setText("Number of Employees: " + this.model.getEmployeeCount());
                 Department selected_department = departmentsComboBox.getSelectionModel().getSelectedItem();
                 if (selected_department == selected_employee.getDepartment()) {
                     this.selectedDepartmentEmployeeCount.setText("Number of Employees: " + selected_department.getEmployeeCount());
-                    // Adjusting department budget
-                    this.selectedDepartmentExpenses.setText("Department Salary Expense: " + this.departmentsComboBox.getSelectionModel().getSelectedItem().getSalaryExpense());
+                    // Adjusting department salary expense
+                    this.selectedDepartmentExpenses.setText("Department Salary Expense: " + selected_department.getSalaryExpense());
                 }
                 Team selected_team = teamsComboBox.getSelectionModel().getSelectedItem();
                 if (selected_team == selected_employee.getTeam()) {
                     this.selectedTeamEmployeeCount.setText("Number of Employees: " + selected_team.getEmployees().size());
-                    // Adjusting team budget
-                    this.selectedTeamExpenses.setText("Team Salary Expense: " + this.teamsComboBox.getSelectionModel().getSelectedItem().getSalaryExpense());
+                    // Adjusting team salary expense
+                    this.selectedTeamExpenses.setText("Team Salary Expense: " + selected_team.getSalaryExpense());
                 }
 
                 // Updating the company details UI and employee table to reflect the changes

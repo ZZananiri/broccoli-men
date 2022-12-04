@@ -101,14 +101,11 @@ public class Department implements IExpensable{
      */
     @Override
     public double getSalaryExpense() {
-        this.salaryExpense = 0;
+        double salaryExpense = 0.0;
         for (Team team : getTeams()){
-            for (Employee employee : team.getEmployees())
-            {
-                this.salaryExpense+= employee.getSalaryExpense();
-            }
+            salaryExpense += team.getSalaryExpense();
         }
-        return this.salaryExpense;
+        return salaryExpense;
     }
 
     @Override
