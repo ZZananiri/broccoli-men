@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * A complete class representation of the state of a company department.
  */
-public class Department {
+public class Department implements IExpensable{
     private ArrayList<Team> teams;  // All the teams contained in the department
     private String name;    // Name of the department
     private String description; // A description of the department
@@ -99,8 +99,13 @@ public class Department {
      * Returns the department's salary expense.
      * @return the department's salary expense.
      */
+    @Override
     public double getSalaryExpense() {
-        return this.salaryExpense;
+        double salaryExpense = 0.0;
+        for (Team team : getTeams()){
+            salaryExpense += team.getSalaryExpense();
+        }
+        return salaryExpense;
     }
 
     @Override
