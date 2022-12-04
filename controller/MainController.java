@@ -1030,13 +1030,11 @@ public class MainController {
                         this.companySalaryExpenseTxt.setText("Total Salary Expense: " + model.getSalaryExpense());
                         Department selected_department = departmentsComboBox.getSelectionModel().getSelectedItem();
                         if (selected_department == selected_employee.getDepartment()) {
-                            this.selectedDepartmentEmployeeCount.setText("Number of Employees: " + selected_department.getEmployeeCount());
                             // Adjusting department budget
                             this.selectedDepartmentExpenses.setText("Department Salary Expense: " + this.departmentsComboBox.getSelectionModel().getSelectedItem().getSalaryExpense());
                         }
                         Team selected_team = teamsComboBox.getSelectionModel().getSelectedItem();
                         if (selected_team == selected_employee.getTeam()) {
-                            this.selectedTeamEmployeeCount.setText("Number of Employees: " + selected_team.getEmployees().size());
                             // Adjusting team budget
                             this.selectedTeamExpenses.setText("Team Salary Expense: " + this.teamsComboBox.getSelectionModel().getSelectedItem().getSalaryExpense());
                         }
@@ -1117,7 +1115,10 @@ public class MainController {
                 // Updating employee counts
                 this.selectedDepartmentEmployeeCount.setText("Number of Employees: " + selected_department.getEmployeeCount());
                 this.selectedTeamEmployeeCount.setText("Number of Employees: " + selected_team.getEmployees().size());
-
+                // Adjusting department budget
+                this.selectedDepartmentExpenses.setText("Department Salary Expense: " + this.departmentsComboBox.getSelectionModel().getSelectedItem().getSalaryExpense());
+                // Adjusting team budget
+                this.selectedTeamExpenses.setText("Team Salary Expense: " + this.teamsComboBox.getSelectionModel().getSelectedItem().getSalaryExpense());
                 employeeRecordsTable.refresh(); // Updating table with changes
                 dialog.close();
             });
