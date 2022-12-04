@@ -1,10 +1,9 @@
 package models;
 
-import java.util.Objects;
-public class Employee{
+public class Employee implements IExpensable{
     private String firstName;    // Firstname of the employee
     private String lastName;     // Lastname of the employee
-    private float salary;         // Salary of the employee
+    private double salary;         // Salary of the employee
     private String gender;        // Gender of the employee
     private int age;              // Age of the employee
     private int employeeID;       // employee ID of the employee
@@ -19,7 +18,7 @@ public class Employee{
      * @param gender Gender to be given to the employee.
      * @param age Age to be given to the employee.
      */
-    public Employee(String firstName, String lastName, float salary, String gender, int age, int employeeID, Team team, Department department) {
+    public Employee(String firstName, String lastName, double salary, String gender, int age, int employeeID, Team team, Department department) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.salary = salary;
@@ -74,7 +73,7 @@ public class Employee{
      * Returns the employee's salary.
      * @return the employee's salary.
      */
-    public float getSalary() {
+    public double getSalary() {
         return this.salary;
     }
 
@@ -103,10 +102,10 @@ public class Employee{
     }
 
     /**
-     * Sets the employee's salary to the specified float.
+     * Sets the employee's salary to the specified double.
      * @param salary the new salary of the employee.
      */
-    public void setSalary(float salary) {this.salary = salary; }
+    public void setSalary(double salary) {this.salary = salary; }
 
     /**
      * Returns the employee's team.
@@ -154,5 +153,14 @@ public class Employee{
      */
     public void setAge(int age) {
         this.age = age;
+    }
+
+    /**
+     * Returns the employee's salary.
+     * @return the employee's salary.
+     */
+    @Override
+    public double getSalaryExpense() {
+        return this.salary;
     }
 }
