@@ -514,7 +514,7 @@ public class MainController {
                 for (Team team : choice.getTeams()) {
                     this.model.incrementEmployeeCount(-team.getEmployees().size());
                     for (Employee employee : team.getEmployees()) {
-                        employeeRecordsTable.getItems().remove(employee);
+                        fData.remove(employee);
                     }
                 }
                 // Adjusting total company salary expense
@@ -786,7 +786,7 @@ public class MainController {
                     // Adjusting the company's employee count, and removing the employees from the employee table
                     this.model.incrementEmployeeCount(-choice.getEmployees().size());
                     for (Employee employee : choice.getEmployees()) {
-                        employeeRecordsTable.getItems().remove(employee);
+                        fData.remove(employee);
                     }
                     // Adjusting total company and specific department salary expense
                     this.companySalaryExpenseTxt.setText("Total Salary Expense: " + model.getSalaryExpense());
@@ -1197,6 +1197,7 @@ public class MainController {
     @FXML
     private void fireSelectedEmployee(ActionEvent event) {
         Employee selected_employee = employeeRecordsTable.getSelectionModel().getSelectedItem();
+        System.out.println(selected_employee);
         // checking if the user has selected an employee to fire or not
         if (selected_employee == null) {
             WarningPopup.createWarningPopup("No Employee selected", "An employee must first be selected from the employee records table.", this.view.getStage());
@@ -1226,7 +1227,7 @@ public class MainController {
                 selected_employee.getTeam().removeEmployee(selected_employee);
                 selected_employee.getDepartment().incrementEmployeeCount(-1);
                 this.model.incrementEmployeeCount(-1);
-                employeeRecordsTable.getItems().remove(selected_employee);
+                fData.remove(selected_employee);
 
                 // Adjusting total company salary expense
                 this.companySalaryExpenseTxt.setText("Total Salary Expense: " + model.getSalaryExpense());
