@@ -28,18 +28,18 @@
                   <Text fx:id="teamCountTxt" layoutX="14.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Teams: 0" />
                   <Text fx:id="employeeCountTxt" layoutX="14.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Employees: 0" />
                   <Button layoutX="194.0" layoutY="13.0" mnemonicParsing="false" onAction="#editCompanyDetails" prefHeight="26.0" prefWidth="142.0" text="Edit Company Details" />
-                  <Text fx:id="companySalaryBudgetTxt" layoutX="194.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Salary Budget: $XXXXXXX" />
-                  <Text fx:id="companySalaryExpenseTxt" layoutX="194.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Salary Expense: $XXXXXXX" />
-                  <Button layoutX="391.0" layoutY="143.0" mnemonicParsing="false" onAction="#setCompanySalaryBudget" prefHeight="26.0" prefWidth="116.0" text="Set Salary Budget" />
-                  <TextField fx:id="salaryBudgetField" layoutX="391.0" layoutY="113.0" prefHeight="26.0" prefWidth="116.0" promptText="New Salary Budget" />
                   <Button layoutX="349.0" layoutY="13.0" mnemonicParsing="false" onAction="#createNewDepartment" prefHeight="26.0" prefWidth="157.0" text="Create New Department" />
+                  <TextField fx:id="teamSalaryBudgetsField" layoutX="386.0" layoutY="115.0" prefHeight="26.0" prefWidth="120.0" promptText="New Team Budgets" />
+                  <Button layoutX="386.0" layoutY="145.0" mnemonicParsing="false" onAction="#setTeamSalaryBudgets" prefHeight="26.0" prefWidth="120.0" text="Set Team Budgets" />
+                  <Text fx:id="teamSalaryBudgetsTxt" layoutX="194.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team Salary Budgets: 0.0" />
+                  <Text fx:id="companySalaryExpenseTxt" layoutX="194.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Salary Expense: 0.0" />
                </children>
             </AnchorPane>
             <AnchorPane layoutY="180.0" prefHeight="315.0" prefWidth="520.0">
                <children>
-                  <ScrollPane focusTraversable="false" pannable="true" prefHeight="315.0" prefWidth="520.0">
+                  <ScrollPane focusTraversable="true" pannable="true" prefHeight="315.0" prefWidth="520.0">
                      <content>
-                        <TableView fx:id="employeeRecordsTable" editable="true" focusTraversable="false" prefHeight="315.0" prefWidth="690.0">
+                        <TableView fx:id="employeeRecordsTable" editable="true" prefHeight="315.0" prefWidth="690.0">
                            <columns>
                               <TableColumn fx:id="employeeIdCol" editable="false" prefWidth="104.5" resizable="false" text="Employee ID">
                                  <cellValueFactory>
@@ -101,16 +101,14 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Text>
-            <Text fx:id="selectedDepartmentBudget" layoutX="10.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Department Salary Budget: " />
             <Text fx:id="departmentDescriptionTxt" fill="#4b4b4b" layoutX="10.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description of selected department would appear here." wrappingWidth="340.0" />
             <Text fx:id="selectedDepartmentExpenses" layoutX="10.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Department Salary Expense: " />
             <Text fx:id="selectedDepartmentTeamCount" layoutX="10.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Teams:" />
             <Text fx:id="selectedDepartmentEmployeeCount" layoutX="10.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Employees:" />
-            <Button layoutX="237.0" layoutY="159.0" mnemonicParsing="false" onAction="#deleteDepartment" prefHeight="26.0" prefWidth="120.0" text="Delete Department" />
-            <Button layoutX="237.0" layoutY="126.0" mnemonicParsing="false" onAction="#createNewTeam" prefHeight="26.0" prefWidth="120.0" text="Create New Team" />
-            <Button layoutX="237.0" layoutY="13.0" mnemonicParsing="false" onAction="#editDepartmentDetails" prefHeight="26.0" prefWidth="120.0" text="Edit Department" />
-            <Button layoutX="237.0" layoutY="319.0" mnemonicParsing="false" onAction="#hireNewEmployee" prefHeight="26.0" prefWidth="120.0" text="Hire Employee" />
             <ComboBox fx:id="departmentsComboBox" layoutX="110.0" layoutY="13.0" onAction="#selectNewDepartment" prefHeight="26.0" prefWidth="120.0" />
+            <Button layoutX="237.0" layoutY="13.0" mnemonicParsing="false" onAction="#editDepartmentDetails" prefHeight="26.0" prefWidth="120.0" text="Edit Department" />
+            <Button layoutX="237.0" layoutY="126.0" mnemonicParsing="false" onAction="#createNewTeam" prefHeight="26.0" prefWidth="120.0" text="Create New Team" />
+            <Button layoutX="237.0" layoutY="159.0" mnemonicParsing="false" onAction="#deleteDepartment" prefHeight="26.0" prefWidth="120.0" text="Delete Department" />
             <Text fx:id="selectedDepartmentName" layoutX="10.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Department:" />
 
             <Text layoutX="10.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Teams:" wrappingWidth="175.0">
@@ -126,7 +124,7 @@
             <Text fx:id="selectedTeamName" layoutX="10.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Team:" />
             <Button layoutX="237.0" layoutY="202.0" mnemonicParsing="false" onAction="#editTeamDetails" prefHeight="26.0" prefWidth="120.0" text="Edit Team" />
             <Button layoutX="237.0" layoutY="285.0" mnemonicParsing="false" onAction="#deleteTeam" prefHeight="26.0" prefWidth="120.0" text="Delete Team" />
-           
+            <Button layoutX="237.0" layoutY="319.0" mnemonicParsing="false" onAction="#hireNewEmployee" prefHeight="26.0" prefWidth="120.0" text="Hire Employee" />
             <Text layoutX="11.0" layoutY="380.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Options for Selected Employee Record:" wrappingWidth="300.0">
                <font>
                   <Font name="System Bold" size="15.0" />

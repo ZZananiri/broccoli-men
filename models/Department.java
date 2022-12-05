@@ -10,8 +10,6 @@ public class Department implements IExpensable{
     private String name;    // Name of the department
     private String description; // A description of the department
     private int employeeCount;  // Count of the number of employees in the department
-    private double salaryBudget;  // The salary budget of the department
-    private double salaryExpense;   // The salary expense of the department
 
     /**
      * Constructs a Department object with the specified name and description.
@@ -23,8 +21,6 @@ public class Department implements IExpensable{
         this.description = description;
         this.teams = new ArrayList<Team>();
         this.employeeCount = 0;
-        this.salaryBudget = 0.0;
-        this.salaryExpense = 0.0;
     }
     /**
      * Appends the specified teams object to the end of the department's list of teams.
@@ -86,14 +82,6 @@ public class Department implements IExpensable{
      *
      */
     public void incrementEmployeeCount(int inc){this.employeeCount += inc;}
-
-    /**
-     * Returns the department's salary budget.
-     * @return the department's salary budget.
-     */
-    public double getSalaryBudget() {
-        return this.salaryBudget;
-    }
 
     /**
      * Returns the department's salary expense.
