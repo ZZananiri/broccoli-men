@@ -138,9 +138,9 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Text>
-            <TextField fx:id="filterTextField" layoutX="56.0" layoutY="450.0" />
-            <ComboBox fx:id="filterComboBox" layoutX="207.0" layoutY="450.0" onAction="#setFilterStrategy"  prefWidth="150.0" />
-            <Text layoutX="22.0" layoutY="467.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter:" />
+            <TextField fx:id="filterTextField" layoutX="48.0" layoutY="450.0" prefHeight="26.0" prefWidth="151.0" promptText="Filtering Value" />
+            <ComboBox fx:id="filterComboBox" layoutX="207.0" layoutY="450.0" onAction="#setFilterStrategy" prefWidth="150.0" />
+            <Text layoutX="11.0" layoutY="467.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter:" />
          </children>
       </AnchorPane>
 

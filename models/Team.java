@@ -97,6 +97,7 @@ public class Team implements IExpensable, ISalaryBudgetSubscriber{
     /**
      * String representation of the Team object: its name.
      * @return the string representation of the Team object: its name.
+     */
     @Override
     public String toString() {
         return this.getName();

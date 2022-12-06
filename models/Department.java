@@ -96,6 +96,10 @@ public class Department implements IExpensable{
         return salaryExpense;
     }
 
+    /**
+     * String representation of the Department object: its name.
+     * @return the string representation of the Department object: its name.
+     */
     @Override
     public String toString() {
         return this.getName();

@@ -80,7 +80,6 @@ public class MainController {
     private void setFilterStrategy() {
         this.filterStrategy = filterComboBox.getSelectionModel().getSelectedItem();
         this.filterTextField.clear();
-        this.filterTextField.setPromptText("Filtering value");
     }
 
     /**
