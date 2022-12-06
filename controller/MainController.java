@@ -57,7 +57,7 @@ public class MainController {
     private ObservableList<Employee> fData = FXCollections.observableArrayList();
 
     // Filtering strategy for filtering employee records
-    FilterStrategy filterStrategy = new NoFilterStrategy();
+    FilterStrategy filterStrategy;
 
     private CompanyModel model; // The model of the company
     private MainView view;  // The view in which this controller is responsible for
@@ -79,8 +79,8 @@ public class MainController {
     @FXML
     private void setFilterStrategy() {
         this.filterStrategy = filterComboBox.getSelectionModel().getSelectedItem();
-        this.filterTextField.setText(this.filterTextField.getText() + " ");
-        this.filterTextField.setText(this.filterTextField.getText().substring(0, this.filterTextField.getLength() - 1));
+        this.filterTextField.clear();
+        this.filterTextField.setPromptText("Input initial filtering value");
     }
 
     /**
@@ -88,8 +88,10 @@ public class MainController {
      */
     @FXML
     private void initialize() {
-        this.filterComboBox.getItems().add(filterStrategy);
-        this.filterComboBox.getSelectionModel().select(filterStrategy);
+        NoFilterStrategy initialFilterStrategy = new NoFilterStrategy();
+        this.filterComboBox.getItems().add(initialFilterStrategy);
+        this.filterComboBox.getSelectionModel().select(initialFilterStrategy);
+        this.setFilterStrategy();
         this.filterComboBox.getItems().add(new IdFilterStrategy());
         this.filterComboBox.getItems().add(new FirstNameFilterStrategy());
         this.filterComboBox.getItems().add(new LastNameFilterStrategy());
@@ -99,7 +101,7 @@ public class MainController {
         this.filterComboBox.getItems().add(new SalaryFilterStrategy());
         this.filterComboBox.getItems().add(new GenderFilterStrategy());
         fData = this.employeeRecordsTable.getItems();
-        FilteredList<Employee> filteredData = new FilteredList<>(fData, (b) -> true);
+        FilteredList<Employee> filteredData = new FilteredList<>(fData);
         this.filterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate((employee) -> {
                 if (newValue != null && !newValue.isEmpty()) {
@@ -112,7 +114,6 @@ public class MainController {
         SortedList<Employee> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(this.employeeRecordsTable.comparatorProperty());
         this.employeeRecordsTable.setItems(sortedData);
-        initializeSampleData();
     }
 
     /**
@@ -1197,7 +1198,6 @@ public class MainController {
     @FXML
     private void fireSelectedEmployee(ActionEvent event) {
         Employee selected_employee = employeeRecordsTable.getSelectionModel().getSelectedItem();
-        System.out.println(selected_employee);
         // checking if the user has selected an employee to fire or not
         if (selected_employee == null) {
             WarningPopup.createWarningPopup("No Employee selected", "An employee must first be selected from the employee records table.", this.view.getStage());
@@ -1262,37 +1262,5 @@ public class MainController {
             dialog.setScene(dialogScene);
             dialog.show();
         }
-    }
-
-    /**
-     * Creates sample data to view for testing purposes.
-     */
-    private void initializeSampleData() {
-        this.companyNameTxt.setText("UTM");
-        this.companyDescriptionTxt.setText("This is a sample company based off of UTM.");
-        Department MCSS = new Department("MCSS", "This is the department for MCSS; Mathematics, Computer Science, and Statistics.");
-        Team Math = new Team("Mathematics", "This is the team, part of MCSS, dedicated to studying Mathematics.");
-        Team CS = new Team("Computer Science", "This is the team, part of MCSS, dedicated to studying Computer Science.");
-        Team Statistics = new Team("Statistics", "This is the team, part of MCSS, dedicated to studying Statistics.");
-        MCSS.addTeam(Math);
-        MCSS.addTeam(CS);
-        MCSS.addTeam(Statistics);
-        Employee Ziad = new Employee("Ziad", "Zananiri", 1923.57, Employee.Gender.FEMALE.getGender(), 19, 1, CS, MCSS);
-        CS.addEmployee(Ziad);
-        Employee Qais = new Employee("Qais", "Al-Khatib", 0.02, Employee.Gender.TRANSGENDER.getGender(), 2, 2, Statistics, MCSS);
-        Statistics.addEmployee(Qais);
-        Employee Arian =  new Employee("Arian", "Sadeg", 9000.1, Employee.Gender.MALE.getGender(), 34, 3, Math, MCSS);
-        Math.addEmployee(Arian);
-        Employee Dev = new Employee("Devanshu", "Singhv", 1, Employee.Gender.MALE.getGender(), -5, 4, CS, MCSS);
-        CS.addEmployee(Dev);
-        fData.add(Ziad);
-        fData.add(Qais);
-        fData.add(Arian);
-        fData.add(Dev);
-        this.model.addDepartment(MCSS);
-        this.departmentsComboBox.getItems().add(MCSS);
-        this.teamsComboBox.getItems().add(CS);
-        this.teamsComboBox.getItems().add(Math);
-        this.teamsComboBox.getItems().add(Statistics);
     }
 }

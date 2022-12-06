@@ -140,8 +140,8 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Text>
-            <ComboBox fx:id="filterComboBox" layoutX="207.0" layoutY="450.0" onAction="#setFilterStrategy"  prefWidth="150.0" />
             <TextField fx:id="filterTextField" layoutX="56.0" layoutY="450.0" />
+            <ComboBox fx:id="filterComboBox" layoutX="207.0" layoutY="450.0" onAction="#setFilterStrategy"  prefWidth="150.0" />
             <Text layoutX="22.0" layoutY="467.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter:" />
          </children>
       </AnchorPane>
