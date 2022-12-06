@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="495.0" prefWidth="880.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="495.0" prefWidth="880.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <AnchorPane prefHeight="495.0">
          <children>
@@ -27,10 +21,9 @@
                   <Text fx:id="departmentCountTxt" layoutX="14.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Departments: 0" />
                   <Text fx:id="teamCountTxt" layoutX="14.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Teams: 0" />
                   <Text fx:id="employeeCountTxt" layoutX="14.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Employees: 0" />
-                  <Button layoutX="194.0" layoutY="13.0" mnemonicParsing="false" onAction="#editCompanyDetails" prefHeight="26.0" prefWidth="142.0" text="Edit Company Details" />
-                  <Button layoutX="349.0" layoutY="13.0" mnemonicParsing="false" onAction="#createNewDepartment" prefHeight="26.0" prefWidth="157.0" text="Create New Department" />
-                  <TextField fx:id="teamSalaryBudgetsField" layoutX="386.0" layoutY="115.0" prefHeight="26.0" prefWidth="120.0" promptText="New Team Budgets" />
-                  <Button layoutX="386.0" layoutY="145.0" mnemonicParsing="false" onAction="#setTeamSalaryBudgets" prefHeight="26.0" prefWidth="120.0" text="Set Team Budgets" />
+                  <Button layoutX="194.0" layoutY="13.0" onAction="#editCompanyDetails" prefHeight="26.0" prefWidth="142.0" text="_Edit Company Details" />
+                  <Button layoutX="349.0" layoutY="13.0" onAction="#createNewDepartment" prefHeight="26.0" prefWidth="157.0" text="_Create New Department" />                  <TextField fx:id="teamSalaryBudgetsField" layoutX="386.0" layoutY="115.0" prefHeight="26.0" prefWidth="120.0" promptText="New Team Budgets" />
+                  <Button layoutX="386.0" layoutY="145.0" onAction="#setTeamSalaryBudgets" prefHeight="26.0" prefWidth="120.0" text="_Set Team Budgets" />
                   <Text fx:id="teamSalaryBudgetsTxt" layoutX="194.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team Salary Budgets: 0.0" />
                   <Text fx:id="companySalaryExpenseTxt" layoutX="194.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Salary Expense: 0.0" />
                </children>
@@ -106,9 +99,9 @@
             <Text fx:id="selectedDepartmentTeamCount" layoutX="10.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Teams:" />
             <Text fx:id="selectedDepartmentEmployeeCount" layoutX="10.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Employees:" />
             <ComboBox fx:id="departmentsComboBox" layoutX="110.0" layoutY="13.0" onAction="#selectNewDepartment" prefHeight="26.0" prefWidth="120.0" />
-            <Button layoutX="237.0" layoutY="13.0" mnemonicParsing="false" onAction="#editDepartmentDetails" prefHeight="26.0" prefWidth="120.0" text="Edit Department" />
-            <Button layoutX="237.0" layoutY="126.0" mnemonicParsing="false" onAction="#createNewTeam" prefHeight="26.0" prefWidth="120.0" text="Create New Team" />
-            <Button layoutX="237.0" layoutY="159.0" mnemonicParsing="false" onAction="#deleteDepartment" prefHeight="26.0" prefWidth="120.0" text="Delete Department" />
+            <Button layoutX="237.0" layoutY="13.0" onAction="#editDepartmentDetails" prefHeight="26.0" prefWidth="120.0" text="_Edit Department" />
+            <Button layoutX="237.0" layoutY="126.0" onAction="#createNewTeam" prefHeight="26.0" prefWidth="120.0" text="_Create New Team" />
+            <Button layoutX="237.0" layoutY="159.0" onAction="#deleteDepartment" prefHeight="26.0" prefWidth="120.0" text="_Delete Department" />
             <Text fx:id="selectedDepartmentName" layoutX="10.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Department:" />
 
             <Text layoutX="10.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Teams:" wrappingWidth="175.0">
@@ -122,17 +115,17 @@
             <Text fx:id="selectedTeamEmployeeCount" layoutX="10.0" layoutY="352.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Employees:" />
             <ComboBox fx:id="teamsComboBox" layoutX="110.0" layoutY="202.0" onAction="#selectNewTeam" prefHeight="26.0" prefWidth="120.0" />
             <Text fx:id="selectedTeamName" layoutX="10.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Team:" />
-            <Button layoutX="237.0" layoutY="202.0" mnemonicParsing="false" onAction="#editTeamDetails" prefHeight="26.0" prefWidth="120.0" text="Edit Team" />
-            <Button layoutX="237.0" layoutY="285.0" mnemonicParsing="false" onAction="#deleteTeam" prefHeight="26.0" prefWidth="120.0" text="Delete Team" />
-            <Button layoutX="237.0" layoutY="319.0" mnemonicParsing="false" onAction="#hireNewEmployee" prefHeight="26.0" prefWidth="120.0" text="Hire Employee" />
+            <Button layoutX="237.0" layoutY="202.0" onAction="#editTeamDetails" prefHeight="26.0" prefWidth="120.0" text="_Edit Team" />
+            <Button layoutX="237.0" layoutY="301.0" onAction="#deleteTeam" prefHeight="26.0" prefWidth="120.0" text="_Delete Team" />
+            <Button layoutX="237.0" layoutY="335.0" onAction="#hireNewEmployee" prefHeight="26.0" prefWidth="120.0" text="_Hire Employee" />
             <Text layoutX="11.0" layoutY="380.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Options for Selected Employee Record:" wrappingWidth="300.0">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </Text>
-            <Button layoutX="10.0" layoutY="390.0" mnemonicParsing="false" onAction="#editEmployeeDetails" prefHeight="26.0" prefWidth="107.0" text="Edit Details" />
-            <Button layoutX="130.0" layoutY="390.0" mnemonicParsing="false" onAction="#changeEmployeeTeam" prefHeight="26.0" prefWidth="107.0" text="Change Team" />
-            <Button layoutX="250.0" layoutY="390.0" mnemonicParsing="false" onAction="#fireSelectedEmployee" prefHeight="26.0" prefWidth="107.0" text="Fire Employee" />
+            <Button layoutX="10.0" layoutY="390.0" onAction="#editEmployeeDetails" prefHeight="26.0" prefWidth="107.0" text="_Edit Details" />
+            <Button layoutX="130.0" layoutY="390.0" onAction="#changeEmployeeTeam" prefHeight="26.0" prefWidth="107.0" text="_Change Team" />
+            <Button layoutX="250.0" layoutY="390.0" onAction="#fireSelectedEmployee" prefHeight="26.0" prefWidth="107.0" text="_Fire Employee" />
             <Text layoutX="11.0" layoutY="440.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Employee Records Filtering Options:" wrappingWidth="300.0">
                <font>
                   <Font name="System Bold" size="15.0" />
