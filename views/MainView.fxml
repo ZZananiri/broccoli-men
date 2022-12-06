@@ -73,7 +73,7 @@
                               </TableColumn>
                               <TableColumn fx:id="salaryCol" editable="false" minWidth="7.5" prefWidth="73.5" resizable="false" text="Salary">
                                  <cellValueFactory>
-                                    <PropertyValueFactory property="salary" />
+                                    <PropertyValueFactory property="salaryExpense" />
                                  </cellValueFactory>
                               </TableColumn>
                               <TableColumn fx:id="genderCol" editable="false" prefWidth="75.0" resizable="false" text="Gender">
@@ -102,9 +102,9 @@
                </font>
             </Text>
             <Text fx:id="departmentDescriptionTxt" fill="#4b4b4b" layoutX="10.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description of selected department would appear here." wrappingWidth="340.0" />
-            <Text fx:id="selectedDepartmentExpenses" layoutX="10.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Department Salary Expense: " />
-            <Text fx:id="selectedDepartmentTeamCount" layoutX="10.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Teams:" />
-            <Text fx:id="selectedDepartmentEmployeeCount" layoutX="10.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Employees:" />
+            <Text fx:id="selectedDepartmentExpenses" layoutX="10.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Department Salary Expense: " />
+            <Text fx:id="selectedDepartmentTeamCount" layoutX="10.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Teams:" />
+            <Text fx:id="selectedDepartmentEmployeeCount" layoutX="10.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Employees:" />
             <ComboBox fx:id="departmentsComboBox" layoutX="110.0" layoutY="13.0" onAction="#selectNewDepartment" prefHeight="26.0" prefWidth="120.0" />
             <Button layoutX="237.0" layoutY="13.0" mnemonicParsing="false" onAction="#editDepartmentDetails" prefHeight="26.0" prefWidth="120.0" text="Edit Department" />
             <Button layoutX="237.0" layoutY="126.0" mnemonicParsing="false" onAction="#createNewTeam" prefHeight="26.0" prefWidth="120.0" text="Create New Team" />
@@ -116,10 +116,10 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Text>
-            <Text fx:id="selectedTeamBudget" layoutX="10.0" layoutY="305.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team Salary Budget: " />
+            <Text fx:id="selectedTeamBudget" layoutX="10.0" layoutY="320.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team Salary Budget: " />
             <Text fx:id="teamDescriptionTxt" fill="#4b4b4b" layoutX="10.0" layoutY="268.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description of selected team would appear here." wrappingWidth="340.0" />
-            <Text fx:id="selectedTeamExpenses" layoutX="10.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team Salary Expense: " />
-            <Text fx:id="selectedTeamEmployeeCount" layoutX="10.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Employees:" />
+            <Text fx:id="selectedTeamExpenses" layoutX="10.0" layoutY="336.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team Salary Expense: " />
+            <Text fx:id="selectedTeamEmployeeCount" layoutX="10.0" layoutY="352.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Employees:" />
             <ComboBox fx:id="teamsComboBox" layoutX="110.0" layoutY="202.0" onAction="#selectNewTeam" prefHeight="26.0" prefWidth="120.0" />
             <Text fx:id="selectedTeamName" layoutX="10.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Team:" />
             <Button layoutX="237.0" layoutY="202.0" mnemonicParsing="false" onAction="#editTeamDetails" prefHeight="26.0" prefWidth="120.0" text="Edit Team" />
@@ -138,6 +138,9 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Text>
+            <TextField fx:id="filterTextField" layoutX="56.0" layoutY="450.0" />
+            <ComboBox fx:id="filterComboBox" layoutX="207.0" layoutY="450.0" onAction="#setFilterStrategy"  prefWidth="150.0" />
+            <Text layoutX="22.0" layoutY="467.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter:" />
          </children>
       </AnchorPane>
 
