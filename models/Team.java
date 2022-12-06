@@ -2,7 +2,7 @@ package models;
 
 import java.util.ArrayList;
 
-public class Team implements IExpensable{
+public class Team implements IExpensable, ISalaryBudgetSubscriber{
     private ArrayList<Employee> employees;  // list of all the employees contained in the team
     private String name;    // Name of the team
     private String description; // A description of the team
@@ -14,11 +14,16 @@ public class Team implements IExpensable{
      * @param name Name to be given to the team.
      * @param description Description to be given to the team.
      */
-    public Team(String name, String description) {
+    public Team(String name, String description, double salaryBudget) {
         this.name = name;
         this.description = description;
         this.employees = new ArrayList<Employee>();
-        this.salaryBudget = 0.0;
+        this.salaryBudget = salaryBudget;
+    }
+
+    @Override
+    public void updateSalaryBudget(double available_budget) {
+        this.salaryBudget = available_budget;
     }
 
     /**
@@ -88,7 +93,11 @@ public class Team implements IExpensable{
      * @param employee element to be removed from the teams list of employees.
      */
     public void removeEmployee(Employee employee){this.employees.remove(employee);}
-
+    
+    /**
+     * String representation of the Team object: its name.
+     * @return the string representation of the Team object: its name.
+     */
     @Override
     public String toString() {
         return this.getName();

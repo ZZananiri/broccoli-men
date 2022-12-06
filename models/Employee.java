@@ -3,12 +3,33 @@ package models;
 public class Employee implements IExpensable{
     private String firstName;    // Firstname of the employee
     private String lastName;     // Lastname of the employee
-    private double salary;         // Salary of the employee
+    private double salaryExpense;         // Salary of the employee
     private String gender;        // Gender of the employee
     private int age;              // Age of the employee
     private int employeeID;       // employee ID of the employee
     private Team team;
     private Department department;
+
+    /**
+     * Enum for the gender options of an employee
+     */
+    public enum Gender {
+        //constants of type Gender
+        MALE("Male"),
+        FEMALE("Female"),
+        TRANSGENDER("Transgender"),
+        NON_BINARY("Non-Binary"),
+        PREFER_NOT_TO_ANSWER("Prefer not to answer");
+
+        //Instance variable
+        String gender;
+
+        //Constructor
+        Gender(String g) {this.gender = g;}
+
+        //Getter method
+        public String getGender() {return gender;}
+    }
 
     /**
      * Constructs an Employee object with the specified name and salary.
@@ -21,7 +42,7 @@ public class Employee implements IExpensable{
     public Employee(String firstName, String lastName, double salary, String gender, int age, int employeeID, Team team, Department department) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.salary = salary;
+        this.salaryExpense = salary;
         this.gender = gender;
         this.age = age;
         this.employeeID = employeeID;
@@ -97,7 +118,7 @@ public class Employee implements IExpensable{
      * Sets the employee's salary to the specified double.
      * @param salary the new salary of the employee.
      */
-    public void setSalary(double salary) {this.salary = salary; }
+    public void setSalaryExpense(double salary) {this.salaryExpense = salary; }
 
     /**
      * Returns the employee's team.
@@ -153,6 +174,6 @@ public class Employee implements IExpensable{
      */
     @Override
     public double getSalaryExpense() {
-        return this.salary;
+        return this.salaryExpense;
     }
 }

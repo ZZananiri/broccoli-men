@@ -10,5 +10,5 @@ public interface IExpensable {
      *
      * @return salary expense of object
      */
-    public double getSalaryExpense();
+    double getSalaryExpense();
 }
