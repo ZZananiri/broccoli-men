@@ -93,7 +93,10 @@ public class Team implements IExpensable, ISalaryBudgetSubscriber{
      * @param employee element to be removed from the teams list of employees.
      */
     public void removeEmployee(Employee employee){this.employees.remove(employee);}
-
+    
+    /**
+     * String representation of the Team object: its name.
+     * @return the string representation of the Team object: its name.
     @Override
     public String toString() {
         return this.getName();
