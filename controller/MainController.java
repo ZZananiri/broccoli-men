@@ -1,5 +1,10 @@
 package controller;
 
+import filtering.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -48,6 +53,12 @@ public class MainController {
     private final int MAX_EMPLOYEE_AGE_LENGTH = 2;
     private int EMPLOYEE_ID = 1000;
 
+    // Data storage for all employee records
+    private ObservableList<Employee> fData = FXCollections.observableArrayList();
+
+    // Filtering strategy for filtering employee records
+    FilterStrategy filterStrategy;
+
     private CompanyModel model; // The model of the company
     private MainView view;  // The view in which this controller is responsible for
 
@@ -59,6 +70,50 @@ public class MainController {
     public MainController(CompanyModel model, MainView view) {
         this.model = model;
         this.view = view;
+    }
+
+    /**
+     * Sets the current filter strategy to the one selected in the filters ComboBox and update the employee records
+     * TableView.
+     */
+    @FXML
+    private void setFilterStrategy() {
+        this.filterStrategy = filterComboBox.getSelectionModel().getSelectedItem();
+        this.filterTextField.clear();
+        this.filterTextField.setPromptText("Filtering value");
+    }
+
+    /**
+     * Initializes the filtering UI elements for the employee TableView.
+     */
+    @FXML
+    private void initialize() {
+        NoFilterStrategy initialFilterStrategy = new NoFilterStrategy();
+        this.filterComboBox.getItems().add(initialFilterStrategy);
+        this.filterComboBox.getSelectionModel().select(initialFilterStrategy);
+        this.setFilterStrategy();
+        this.filterComboBox.getItems().add(new IdFilterStrategy());
+        this.filterComboBox.getItems().add(new FirstNameFilterStrategy());
+        this.filterComboBox.getItems().add(new LastNameFilterStrategy());
+        this.filterComboBox.getItems().add(new TeamFilterStrategy());
+        this.filterComboBox.getItems().add(new DepartmentFilterStrategy());
+        this.filterComboBox.getItems().add(new AgeFilterStrategy());
+        this.filterComboBox.getItems().add(new SalaryFilterStrategy());
+        this.filterComboBox.getItems().add(new GenderFilterStrategy());
+        fData = this.employeeRecordsTable.getItems();
+        FilteredList<Employee> filteredData = new FilteredList<>(fData);
+        this.filterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate((employee) -> {
+                if (newValue != null && !newValue.isEmpty()) {
+                    return this.filterStrategy.filterEmployees(employee, newValue.toLowerCase());
+                } else {
+                    return true;
+                }
+            });
+        });
+        SortedList<Employee> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(this.employeeRecordsTable.comparatorProperty());
+        this.employeeRecordsTable.setItems(sortedData);
     }
 
     /**
@@ -141,6 +196,12 @@ public class MainController {
     private TableColumn<Employee, Float> salaryCol;
     @FXML
     private TableColumn<Employee, String> genderCol;
+
+    // === EMPLOYEE FILTERING UI ELEMENTS ================================================================
+    @FXML
+    private ComboBox<FilterStrategy> filterComboBox;
+    @FXML
+    private TextField filterTextField;
 
     // === COMPANY SECTION EVENT HANDLERS ================================================================
     @FXML
@@ -454,7 +515,7 @@ public class MainController {
                 for (Team team : choice.getTeams()) {
                     this.model.incrementEmployeeCount(-team.getEmployees().size());
                     for (Employee employee : team.getEmployees()) {
-                        employeeRecordsTable.getItems().remove(employee);
+                        fData.remove(employee);
                     }
                 }
                 // Adjusting total company salary expense
@@ -726,7 +787,7 @@ public class MainController {
                     // Adjusting the company's employee count, and removing the employees from the employee table
                     this.model.incrementEmployeeCount(-choice.getEmployees().size());
                     for (Employee employee : choice.getEmployees()) {
-                        employeeRecordsTable.getItems().remove(employee);
+                        fData.remove(employee);
                     }
                     // Adjusting total company and specific department salary expense
                     this.companySalaryExpenseTxt.setText("Total Salary Expense: " + model.getSalaryExpense());
@@ -823,24 +884,24 @@ public class MainController {
 
             // Setting up gender buttons
             RadioButton employeeGenderMaleButton = new RadioButton("Male");
-            employeeGenderMaleButton.setUserData("Male");
+            employeeGenderMaleButton.setUserData(Employee.Gender.MALE.getGender());
             employeeGenderMaleButton.setToggleGroup(employeeGenderGroup);
             employeeGenderMaleButton.setSelected(true);
 
             RadioButton employeeGenderFemaleButton = new RadioButton("Female");
-            employeeGenderFemaleButton.setUserData("Female");
+            employeeGenderFemaleButton.setUserData(Employee.Gender.FEMALE.getGender());
             employeeGenderFemaleButton.setToggleGroup(employeeGenderGroup);
 
             RadioButton employeeGenderTransButton = new RadioButton("Transgender");
-            employeeGenderTransButton.setUserData("Transgender");
+            employeeGenderTransButton.setUserData(Employee.Gender.TRANSGENDER.getGender());
             employeeGenderTransButton.setToggleGroup(employeeGenderGroup);
 
             RadioButton employeeGenderNonBinaryButton = new RadioButton("Non-Binary");
-            employeeGenderNonBinaryButton.setUserData("Non-Binary");
+            employeeGenderNonBinaryButton.setUserData(Employee.Gender.NON_BINARY.getGender());
             employeeGenderNonBinaryButton.setToggleGroup(employeeGenderGroup);
 
             RadioButton employeeGenderNoResponseButton = new RadioButton("Prefer not to answer");
-            employeeGenderNoResponseButton.setUserData("Prefer not to answer");
+            employeeGenderNoResponseButton.setUserData(Employee.Gender.PREFER_NOT_TO_ANSWER.getGender());
             employeeGenderNoResponseButton.setToggleGroup(employeeGenderGroup);
 
             // Handling click on hire new employee button
@@ -868,7 +929,7 @@ public class MainController {
                         this.selectedDepartmentEmployeeCount.setText("Number of Employees: " + departmentsComboBox.getSelectionModel().getSelectedItem().getEmployeeCount());
                         this.selectedTeamEmployeeCount.setText("Number of Employees: " + choice.getEmployees().size());
                         this.employeeCountTxt.setText("Number of Employees: " + model.getEmployeeCount());
-                        this.employeeRecordsTable.getItems().add(employee); // Adds the employee to the employee records view
+                        fData.add(employee); // Adds the employee to the employee records view
                         // Adjusting total company, specific department and team salary expense
                         this.companySalaryExpenseTxt.setText("Total Salary Expense: " + model.getSalaryExpense());
                         this.selectedDepartmentExpenses.setText("Department Salary Expense: " + this.departmentsComboBox.getSelectionModel().getSelectedItem().getSalaryExpense());
@@ -1023,7 +1084,7 @@ public class MainController {
                         selected_employee.setFirstName(firstName);
                         selected_employee.setLastName(lastName);
                         selected_employee.setAge(age);
-                        selected_employee.setSalary(salary);
+                        selected_employee.setSalaryExpense(salary);
                         selected_employee.setGender(gender);
 
                         // Adjusting total company salary expense
@@ -1166,7 +1227,7 @@ public class MainController {
                 selected_employee.getTeam().removeEmployee(selected_employee);
                 selected_employee.getDepartment().incrementEmployeeCount(-1);
                 this.model.incrementEmployeeCount(-1);
-                employeeRecordsTable.getItems().remove(selected_employee);
+                fData.remove(selected_employee);
 
                 // Adjusting total company salary expense
                 this.companySalaryExpenseTxt.setText("Total Salary Expense: " + model.getSalaryExpense());
