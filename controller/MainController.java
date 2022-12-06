@@ -80,7 +80,6 @@ public class MainController {
     private void setFilterStrategy() {
         this.filterStrategy = filterComboBox.getSelectionModel().getSelectedItem();
         this.filterTextField.clear();
-        this.filterTextField.setPromptText("Filtering value");
     }
 
     /**
@@ -125,7 +124,7 @@ public class MainController {
         departmentCountTxt.setText("Number of Departments: " + model.getDepartments().size());
         teamCountTxt.setText("Number of Teams: " + model.getTeamCount());
         employeeCountTxt.setText("Number of Employees: " + model.getEmployeeCount());
-        companySalaryBudgetTxt.setText("Salary Budget: " + model.getSalaryBudget());
+        teamSalaryBudgetsTxt.setText("Team Salary Budgets: " + model.getTeamSalaryBudgets());
         companySalaryExpenseTxt.setText("Total Salary Expense: " + model.getSalaryExpense());
     }
 
@@ -141,11 +140,11 @@ public class MainController {
     @FXML
     private Text employeeCountTxt;
     @FXML
-    private Text companySalaryBudgetTxt;
+    private Text teamSalaryBudgetsTxt;
     @FXML
     private Text companySalaryExpenseTxt;
     @FXML
-    private TextField salaryBudgetField;
+    private TextField teamSalaryBudgetsField;
 
     // === DEPARTMENT SECTION UI ELEMENTS ============================================================
     @FXML
@@ -154,8 +153,6 @@ public class MainController {
     private Text selectedDepartmentName;
     @FXML
     private Text departmentDescriptionTxt;
-    @FXML
-    private Text selectedDepartmentBudget;
     @FXML
     private Text selectedDepartmentExpenses;
     @FXML
@@ -354,8 +351,25 @@ public class MainController {
         dialog.show();
     }
     @FXML
-    private void setCompanySalaryBudget(ActionEvent event) {
-
+    private void setTeamSalaryBudgets(ActionEvent event) {
+        // Trying to set new team salary budgets
+        try {
+            String budget_text = teamSalaryBudgetsField.getText();
+            if (budget_text.equals("")){    // A budget must be specified
+                WarningPopup.createWarningPopup("No Budget Specified", "A budget must be specified!", view.getStage());
+                return;
+            }
+            double new_budget = Math.round(Double.parseDouble(teamSalaryBudgetsField.getText()) * 100.0) / 100.0;
+            this.model.setTeamSalaryBudget(new_budget);
+            // Updating UI
+            this.teamSalaryBudgetsTxt.setText("Team Salary Budgets: " + this.model.getTeamSalaryBudgets());
+            Team selected_team = teamsComboBox.getSelectionModel().getSelectedItem();
+            if (selected_team != null) {
+                this.selectedTeamBudget.setText("Team Salary Budget: " + selected_team.getSalaryBudget());
+            }
+        } catch (NumberFormatException e) { // Specified budget must be parsable into a double
+            WarningPopup.createWarningPopup("Wrong Input Types", "The specified budget should be a number!", view.getStage());
+        }
     }
 
     // === DEPARTMENT SECTION EVENT HANDLERS ============================================================
@@ -369,7 +383,6 @@ public class MainController {
             departmentDescriptionTxt.setText(selectedDepartment.getDescription());
             selectedDepartmentTeamCount.setText("Number of Teams: " + selectedDepartment.getTeams().size());
             selectedDepartmentEmployeeCount.setText("Number of Employees: " + selectedDepartment.getEmployeeCount());
-            selectedDepartmentBudget.setText("Department Salary Budget: " + selectedDepartment.getSalaryBudget());
             selectedDepartmentExpenses.setText("Department Salary Expense: " + selectedDepartment.getSalaryExpense());
 
             // The teams comboBox should only contain the selected department's teams
@@ -380,7 +393,6 @@ public class MainController {
             departmentDescriptionTxt.setText("");
             selectedDepartmentTeamCount.setText("Number of Teams: ");
             selectedDepartmentEmployeeCount.setText("Number of Employees: ");
-            selectedDepartmentBudget.setText("Department Salary Budget: ");
             selectedDepartmentExpenses.setText("Department Salary Expense: ");
 
             // The teams comboBox should contain no teams if no department is selected
@@ -514,6 +526,7 @@ public class MainController {
                 // Adjusting the company's employee count, and removing the employees from the employee table
                 for (Team team : choice.getTeams()) {
                     this.model.incrementEmployeeCount(-team.getEmployees().size());
+                    this.model.removeSalaryBudgetSubscriber(team);  // Removing from subscriber list
                     for (Employee employee : team.getEmployees()) {
                         fData.remove(employee);
                     }
@@ -597,7 +610,7 @@ public class MainController {
                     // Ensuring that the name and description not too long, and creating new department
                     String name = teamNameField.getText().substring(0, Math.min(MAX_TEAM_NAME_LENGTH, teamNameField.getLength()));
                     String description = teamDescriptionField.getText().substring(0, Math.min(MAX_TEAM_DESCRIPTION_LENGTH, teamDescriptionField.getLength()));
-                    Team team = new Team(name, description);
+                    Team team = new Team(name, description, this.model.getTeamSalaryBudgets());
 
                     // Checking if a team with the same name exists
                     if (teamsComboBox.getItems().stream().anyMatch(t -> name.equalsIgnoreCase(t.getName()))) {
@@ -606,6 +619,7 @@ public class MainController {
                         choice.addTeam(team);
                         teamsComboBox.getItems().add(team);
                         this.model.incrementTeamCount(1);
+                        this.model.addSalaryBudgetSubscriber(team); // Adding to subscriber list
                         this.teamCountTxt.setText("Number of Teams: " + model.getTeamCount());
                         this.selectedDepartmentTeamCount.setText("Number of Teams: " + choice.getTeams().size());
                         // Adjusting total company and specific department salary expense
@@ -640,7 +654,7 @@ public class MainController {
         if (choice != null) {
             selectedTeamName.setText("Selected Team: " + choice.getName());
             teamDescriptionTxt.setText(choice.getDescription());
-            selectedTeamEmployeeCount.setText("Number of employees: " + choice.getEmployees().size());
+            selectedTeamEmployeeCount.setText("Number of Employees: " + choice.getEmployees().size());
             selectedTeamBudget.setText("Team Salary Budget: " + choice.getSalaryBudget());
             selectedTeamExpenses.setText("Team Salary Expense: " + choice.getSalaryExpense());
         } else {    // If selection is empty
@@ -780,6 +794,8 @@ public class MainController {
 
                     // Adjusting the company's team count
                     this.model.incrementTeamCount(-1);
+                    // Removing team from company's salary budget subscriber list
+                    this.model.removeSalaryBudgetSubscriber(choice);
                     // Adjusting the department's team count
                     this.selectedDepartmentTeamCount.setText("Number of Teams: " + selectedDepartment.getTeams().size());
                     selectedDepartment.incrementEmployeeCount(-choice.getEmployees().size());
@@ -935,6 +951,10 @@ public class MainController {
                         this.selectedDepartmentExpenses.setText("Department Salary Expense: " + this.departmentsComboBox.getSelectionModel().getSelectedItem().getSalaryExpense());
                         this.selectedTeamExpenses.setText("Team Salary Expense: " + this.teamsComboBox.getSelectionModel().getSelectedItem().getSalaryExpense());
                         dialog.close();
+                        // Checking if team has gone over budget
+                        if (choice.getSalaryExpense() > choice.getSalaryBudget()) {
+                            WarningPopup.createWarningPopup("Over Budget", "The chosen team has gone over budget!", view.getStage());
+                        }
                     } catch (NumberFormatException ex) {
                         WarningPopup.createWarningPopup("Wrong Input Types", "Employee age or salary cannot be a String!", dialog);
                     }

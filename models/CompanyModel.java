@@ -11,8 +11,9 @@ public class CompanyModel implements IExpensable{
     private final ArrayList<Department> departments;  // All the departments in the company
     private int teamCount;  // Count of the number of teams in the company
     private int employeeCount;  // Count of the number of employees in the company
-    private double salaryBudget;  // The salary budget of the company
-    private double salaryExpense;   // The salary expense of the company
+    private double teamSalaryBudgets;  // The allocated budget for each team of the company
+    // List of subscribers to the changes in team salary budgets
+    private final ArrayList<ISalaryBudgetSubscriber> salaryBudgetSubscribers;
 
     /**
      * Constructs a CompanyModel object.
@@ -23,8 +24,8 @@ public class CompanyModel implements IExpensable{
         this.departments = new ArrayList<Department>();
         this.teamCount = 0;
         this.employeeCount = 0;
-        this.salaryBudget = 0;
-        this.salaryExpense = 0;
+        this.teamSalaryBudgets = 0;
+        this.salaryBudgetSubscribers = new ArrayList<ISalaryBudgetSubscriber>();
     }
 
     /**
@@ -97,8 +98,35 @@ public class CompanyModel implements IExpensable{
      * Returns the company's salary budget.
      * @return the company's salary budget.
      */
-    public double getSalaryBudget() {
-        return this.salaryBudget;
+    public double getTeamSalaryBudgets() {
+        return this.teamSalaryBudgets;
+    }
+
+    /**
+     * Sets the salary budget of each of the company's teams to the specified budget amount.
+     * @param teamSalaryBudgets the new salary budget of each of the company's teams.
+     */
+    public void setTeamSalaryBudget(double teamSalaryBudgets) {
+        this.teamSalaryBudgets = teamSalaryBudgets;
+        notifySalaryBudgetSubscribers();
+    }
+
+    /**
+     * Adds the specified ISalaryBudgetSubscriber object to the company's list of salary budget subscribers.
+     * @param subscriber the ISalaryBudgetSubscriber object to add to the company's list of salary budget subscribers.
+     */
+    public void addSalaryBudgetSubscriber(ISalaryBudgetSubscriber subscriber) {
+        if (!this.salaryBudgetSubscribers.contains(subscriber)) {
+            this.salaryBudgetSubscribers.add(subscriber);
+        }
+    }
+
+    /**
+     * Removes the specified ISalaryBudgetSubscriber object from the company's list of salary budget subscribers.
+     * @param subscriber the ISalaryBudgetSubscriber object to remove from the company's list of salary budget subscribers.
+     */
+    public void removeSalaryBudgetSubscriber(ISalaryBudgetSubscriber subscriber) {
+        this.salaryBudgetSubscribers.remove(subscriber);
     }
 
     /**
@@ -112,5 +140,14 @@ public class CompanyModel implements IExpensable{
             salaryExpense+= department.getSalaryExpense();
         }
         return salaryExpense;
+    }
+
+    /**
+     * Notify the salary budget subscribers to update their salary budgets.
+     */
+    private void notifySalaryBudgetSubscribers() {
+        for (ISalaryBudgetSubscriber salaryBudgetSubscriber : salaryBudgetSubscribers) {
+            salaryBudgetSubscriber.updateSalaryBudget(teamSalaryBudgets);
+        }
     }
 }
